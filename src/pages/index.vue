@@ -11,7 +11,7 @@
         Découvrez les dieux, leurs récits et les symboles qui leur sont associés.
       </p>
       <v-chip
-        v-if="!isLoading && !error"
+        v-if="hasLoaded && !error"
         color="amber-darken-3"
         variant="tonal"
       >
@@ -34,7 +34,7 @@
     </div>
 
     <v-progress-linear
-      v-if="isLoading || (!error && gods.length === 0)"
+      v-if="isLoading || (!error && !hasLoaded)"
       indeterminate
       color="amber-darken-3"
       class="mb-6"
@@ -47,7 +47,16 @@
       variant="tonal"
       class="mb-6"
     >
-      {{ error }}
+      <div class="d-flex align-center justify-space-between flex-wrap ga-3">
+        <span>{{ error }}</span>
+        <v-btn
+          variant="text"
+          :loading="isLoading"
+          @click="godStore.init()"
+        >
+          Réessayer
+        </v-btn>
+      </div>
     </v-alert>
 
     <v-alert
@@ -107,7 +116,7 @@
 
   const API_ORIGIN = 'https://apis.divtec.me'
   const godStore = useGodStore()
-  const { gods, categories, totalGods, isLoading, error } = storeToRefs(godStore)
+  const { gods, categories, totalGods, isLoading, hasLoaded, error } = storeToRefs(godStore)
 
   function godImageUrl(image) {
     return new URL(image, API_ORIGIN).toString()

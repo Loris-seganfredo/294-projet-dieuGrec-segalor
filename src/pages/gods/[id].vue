@@ -10,7 +10,7 @@
     </v-btn>
 
     <v-progress-linear
-      v-if="isLoading || (!error && gods.length === 0)"
+      v-if="isLoading || (!error && !hasLoaded)"
       indeterminate
       color="amber-darken-3"
       class="mb-6"
@@ -22,7 +22,16 @@
       type="error"
       variant="tonal"
     >
-      {{ error }}
+      <div class="d-flex align-center justify-space-between flex-wrap ga-3">
+        <span>{{ error }}</span>
+        <v-btn
+          variant="text"
+          :loading="isLoading"
+          @click="godStore.init()"
+        >
+          Réessayer
+        </v-btn>
+      </div>
     </v-alert>
 
     <v-alert
@@ -129,7 +138,7 @@
   const API_ORIGIN = 'https://apis.divtec.me'
   const route = useRoute()
   const godStore = useGodStore()
-  const { gods, isLoading, error } = storeToRefs(godStore)
+  const { isLoading, hasLoaded, error } = storeToRefs(godStore)
 
   const god = computed(() => godStore.getGodById(route.params.id))
 
