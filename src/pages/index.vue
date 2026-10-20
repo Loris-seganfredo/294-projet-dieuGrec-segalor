@@ -20,7 +20,7 @@
     </header>
 
     <div
-      v-if="categories.length"
+      v-if="categories.length > 0"
       class="d-flex justify-center flex-wrap ga-2 mb-6"
     >
       <v-chip
@@ -35,23 +35,23 @@
 
     <v-progress-linear
       v-if="isLoading || (!error && !hasLoaded)"
-      indeterminate
-      color="amber-darken-3"
-      class="mb-6"
       aria-label="Chargement des dieux"
+      class="mb-6"
+      color="amber-darken-3"
+      indeterminate
     />
 
     <v-alert
       v-else-if="error"
+      class="mb-6"
       type="error"
       variant="tonal"
-      class="mb-6"
     >
       <div class="d-flex align-center justify-space-between flex-wrap ga-3">
         <span>{{ error }}</span>
         <v-btn
-          variant="text"
           :loading="isLoading"
+          variant="text"
           @click="godStore.init()"
         >
           Réessayer
@@ -61,9 +61,9 @@
 
     <v-alert
       v-else-if="gods.length === 0"
+      class="mb-6"
       type="info"
       variant="tonal"
-      class="mb-6"
     >
       Aucun dieu n’est disponible pour le moment.
     </v-alert>
@@ -73,22 +73,22 @@
         v-for="god in gods"
         :key="god.id"
         cols="12"
-        sm="6"
-        md="4"
         lg="3"
+        md="4"
+        sm="6"
       >
         <v-card
-          :to="`/gods/${god.id}`"
           class="h-100"
-          rounded="lg"
           hover
+          rounded="lg"
+          :to="`/gods/${god.id}`"
         >
           <v-img
             v-if="god.image"
-            :src="godImageUrl(god.image)"
             :alt="god.name"
-            height="190"
             cover
+            height="190"
+            :src="godImageUrl(god.image)"
           />
           <v-card-item>
             <v-card-title>{{ god.name }}</v-card-title>
@@ -102,7 +102,7 @@
           <v-card-actions>
             <span class="text-amber-darken-3">Voir le portrait</span>
             <v-spacer />
-            <v-icon icon="mdi-arrow-right" color="amber-darken-3" />
+            <v-icon color="amber-darken-3" icon="mdi-arrow-right" />
           </v-card-actions>
         </v-card>
       </v-col>
@@ -118,7 +118,7 @@
   const godStore = useGodStore()
   const { gods, categories, totalGods, isLoading, hasLoaded, error } = storeToRefs(godStore)
 
-  function godImageUrl(image) {
+  function godImageUrl (image) {
     return new URL(image, API_ORIGIN).toString()
   }
 </script>

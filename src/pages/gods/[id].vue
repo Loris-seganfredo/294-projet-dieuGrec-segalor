@@ -1,20 +1,20 @@
 <template>
   <v-container class="py-8">
     <v-btn
+      class="mb-4"
+      prepend-icon="mdi-arrow-left"
       to="/"
       variant="text"
-      prepend-icon="mdi-arrow-left"
-      class="mb-4"
     >
       Retour à la liste
     </v-btn>
 
     <v-progress-linear
       v-if="isLoading || (!error && !hasLoaded)"
-      indeterminate
-      color="amber-darken-3"
-      class="mb-6"
       aria-label="Chargement du dieu"
+      class="mb-6"
+      color="amber-darken-3"
+      indeterminate
     />
 
     <v-alert
@@ -25,8 +25,8 @@
       <div class="d-flex align-center justify-space-between flex-wrap ga-3">
         <span>{{ error }}</span>
         <v-btn
-          variant="text"
           :loading="isLoading"
+          variant="text"
           @click="godStore.init()"
         >
           Réessayer
@@ -44,8 +44,8 @@
 
     <v-card
       v-else
-      rounded="lg"
       class="overflow-hidden"
+      rounded="lg"
     >
       <v-row no-gutters>
         <v-col
@@ -54,11 +54,11 @@
           md="5"
         >
           <v-img
-            :src="godImageUrl(god.image)"
             :alt="god.name"
+            cover
             height="100%"
             min-height="320"
-            cover
+            :src="godImageUrl(god.image)"
           />
         </v-col>
 
@@ -130,8 +130,8 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue'
   import { storeToRefs } from 'pinia'
+  import { computed } from 'vue'
   import { useRoute } from 'vue-router'
   import { useGodStore } from '@/stores/godStore'
 
@@ -142,7 +142,7 @@
 
   const god = computed(() => godStore.getGodById(route.params.id))
 
-  function godImageUrl(image) {
+  function godImageUrl (image) {
     return new URL(image, API_ORIGIN).toString()
   }
 </script>

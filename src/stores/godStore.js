@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 const GODS_API_URL = 'https://apis.divtec.me/api/greek/gods'
 
-async function fetchGodsPage(page) {
+async function fetchGodsPage (page) {
   const url = new URL(GODS_API_URL)
   url.searchParams.set('page', String(page))
 
@@ -15,7 +15,7 @@ async function fetchGodsPage(page) {
   const json = await response.json()
 
   if (!Array.isArray(json.data)) {
-    throw new Error(`La réponse de l’API ne contient pas une liste de dieux valide (page ${page})`)
+    throw new TypeError(`La réponse de l’API ne contient pas une liste de dieux valide (page ${page})`)
   }
 
   return json
@@ -31,15 +31,15 @@ export const useGodStore = defineStore('gods', {
   }),
 
   getters: {
-    totalGods: (state) => state.gods.length,
+    totalGods: state => state.gods.length,
 
-    getGodById: (state) => (id) => {
+    getGodById: state => id => {
       return state.gods.find(god => String(god.id) === String(id))
     },
   },
 
   actions: {
-    async fetchGods() {
+    async fetchGods () {
       const firstPage = await fetchGodsPage(1)
       const gods = [...firstPage.data]
       const reportedPageCount = Number(firstPage.pagination?.pages)
@@ -56,8 +56,10 @@ export const useGodStore = defineStore('gods', {
       this.categories = [...new Set(gods.map(god => god.category).filter(Boolean))]
     },
 
-    async init() {
-      if (this.isLoading || this.hasLoaded) return
+    async init () {
+      if (this.isLoading || this.hasLoaded) {
+        return
+      }
 
       this.isLoading = true
       this.error = null
