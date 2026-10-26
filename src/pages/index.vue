@@ -33,14 +33,21 @@
       </v-chip>
     </div>
 
-    <v-progress-linear
-      v-if="isLoading || (!error && !hasLoaded)"
-      aria-label="Chargement des dieux"
-      class="mb-6"
-      color="amber-darken-3"
-      indeterminate
-    />
-
+    <v-row v-if="isLoading || (!error && !hasLoaded)">
+      <v-col
+        v-for="n in 8"
+        :key="n"
+        cols="12"
+        lg="3"
+        md="4"
+        sm="6"
+      >
+        <v-skeleton-loader
+          height="350"
+          type="image, article"
+        />
+      </v-col>
+    </v-row>
     <v-alert
       v-else-if="error"
       class="mb-6"

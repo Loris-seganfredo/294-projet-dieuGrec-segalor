@@ -1,25 +1,20 @@
 import { defineStore } from 'pinia'
-
-const GODS_API_URL = 'https://apis.divtec.me/api/greek/gods'
+import api from '@/plugins/axios'
 
 async function fetchGodsPage (page) {
-  const url = new URL(GODS_API_URL)
-  url.searchParams.set('page', String(page))
+  const response = await api.get('/gods', {
+    params: { page },
+  })
 
-  const response = await fetch(url)
-
-  if (!response.ok) {
-    throw new Error(`Impossible de charger les dieux (HTTP ${response.status}, page ${page})`)
-  }
-
-  const json = await response.json()
+  const json = response.data
 
   if (!Array.isArray(json.data)) {
-    throw new TypeError(`La réponse de l’API ne contient pas une liste de dieux valide (page ${page})`)
+    throw new TypeError(`La réponse de l'API ne contient pas une liste de dieux valide (page ${page})`)
   }
 
   return json
 }
+
 
 export const useGodStore = defineStore('gods', {
   state: () => ({
