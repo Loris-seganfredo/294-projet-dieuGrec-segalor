@@ -33,6 +33,20 @@
       </v-chip>
     </div>
 
+    <v-row class="mb-4">
+      <v-col cols="12" md="4" sm="6">
+        <v-text-field
+          v-model="searchQuery"
+          clearable
+          density="compact"
+          hide-details
+          label="Rechercher un dieu"
+          prepend-inner-icon="mdi-magnify"
+          variant="outlined"
+        />
+      </v-col>
+    </v-row>
+
     <v-row v-if="isLoading || (!error && !hasLoaded)">
       <v-col
         v-for="n in 8"
@@ -75,9 +89,18 @@
       Aucun dieu n’est disponible pour le moment.
     </v-alert>
 
+    <v-alert
+      v-else-if="filteredBySearch.length === 0"
+      class="mb-6"
+      type="info"
+      variant="tonal"
+    >
+      Aucun dieu ne correspond à votre recherche.
+    </v-alert>
+
     <v-row v-else>
       <v-col
-        v-for="god in gods"
+        v-for="god in filteredBySearch"
         :key="god.id"
         cols="12"
         lg="3"
@@ -119,11 +142,21 @@
 
 <script setup>
   import { storeToRefs } from 'pinia'
+  import { computed, ref } from 'vue'
   import { useGodStore } from '@/stores/godStore'
 
   const API_ORIGIN = 'https://apis.divtec.me'
   const godStore = useGodStore()
   const { gods, categories, totalGods, isLoading, hasLoaded, error } = storeToRefs(godStore)
+  const searchQuery = ref('')
+
+  const filteredBySearch = computed(() => {
+    if (!searchQuery.value) return gods.value
+    const query = searchQuery.value.toLowerCase()
+    return gods.value.filter(god =>
+      god.name.toLowerCase().includes(query),
+    )
+  })
 
   function godImageUrl (image) {
     return new URL(image, API_ORIGIN).toString()
