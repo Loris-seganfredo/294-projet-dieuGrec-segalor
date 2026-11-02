@@ -133,42 +133,7 @@
         md="4"
         sm="6"
       >
-        <v-card
-          class="h-100"
-          hover
-          rounded="lg"
-        >
-          <v-img
-            v-if="god.image"
-            :alt="god.name"
-            cover
-            height="190"
-            :src="godImageUrl(god.image)"
-          />
-          <v-card-item>
-            <v-card-title>{{ god.name }}</v-card-title>
-            <v-card-subtitle>
-              {{ god.category }}<span v-if="god.origin"> · {{ god.origin }}</span>
-            </v-card-subtitle>
-          </v-card-item>
-          <v-card-text class="text-medium-emphasis">
-            {{ god.description }}
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="amber-darken-3" :to="`/gods/${god.id}`" variant="text">
-              Voir le portrait
-            </v-btn>
-            <v-spacer />
-            <v-btn
-              :aria-label="`${godStore.isFavorite(god) ? 'Retirer' : 'Ajouter'} ${god.name} ${godStore.isFavorite(god) ? 'des' : 'aux'} favoris`"
-              :aria-pressed="godStore.isFavorite(god)"
-              color="red-darken-2"
-              :icon="godStore.isFavorite(god) ? 'mdi-heart' : 'mdi-heart-outline'"
-              variant="text"
-              @click="godStore.toggleFavorite(god)"
-            />
-          </v-card-actions>
-        </v-card>
+        <GodCard :god="god" />
       </v-col>
     </v-row>
   </v-container>
@@ -177,9 +142,9 @@
 <script setup>
   import { storeToRefs } from 'pinia'
   import { computed, ref } from 'vue'
+  import GodCard from '@/components/GodCard.vue'
   import { useGodStore } from '@/stores/godStore'
 
-  const API_ORIGIN = 'https://apis.divtec.me'
   const godStore = useGodStore()
   const { gods, categories, totalGods, isLoading, hasLoaded, error } = storeToRefs(godStore)
   const searchQuery = ref('')
@@ -212,7 +177,4 @@
     sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
   }
 
-  function godImageUrl (image) {
-    return new URL(image, API_ORIGIN).toString()
-  }
 </script>

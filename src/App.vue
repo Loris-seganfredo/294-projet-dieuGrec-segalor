@@ -14,3 +14,7 @@
     await godStore.init()
   })
 </script>
+
+<style lang="scss">
+@use '@/styles/favorites.scss';
+</style>

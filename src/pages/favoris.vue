@@ -1,0 +1,50 @@
+<template>
+  <v-container class="py-8">
+    <h1 class="text-h3 text-center mb-8">
+      Mes favoris ({{ godStore.totalFavorites }})
+    </h1>
+
+    <v-progress-linear
+      v-if="godStore.isLoading || (!godStore.error && !godStore.hasLoaded)"
+      aria-label="Chargement des favoris"
+      color="amber-darken-3"
+      indeterminate
+    />
+    <v-alert v-else-if="godStore.error" class="mb-6" type="error" variant="tonal">
+      <div class="d-flex align-center justify-space-between flex-wrap ga-3">
+        <span>{{ godStore.error }}</span>
+        <v-btn :loading="godStore.isLoading" variant="text" @click="godStore.init()">
+          Réessayer
+        </v-btn>
+      </div>
+    </v-alert>
+    <v-alert
+      v-else-if="godStore.totalFavorites === 0"
+      class="mb-6"
+      type="info"
+      variant="tonal"
+    >
+      Vous n’avez pas encore de dieux favoris.
+      Cliquez sur le cœur d’un dieu pour l’ajouter !
+    </v-alert>
+    <v-row v-else>
+      <v-col
+        v-for="god in godStore.getFavorites"
+        :key="god.id"
+        cols="12"
+        lg="3"
+        md="4"
+        sm="6"
+      >
+        <GodCard :god="god" />
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script setup>
+  import GodCard from '@/components/GodCard.vue'
+  import { useGodStore } from '@/stores/godStore'
+
+  const godStore = useGodStore()
+</script>

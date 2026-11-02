@@ -36,6 +36,11 @@ jobs:
         env:
           VITE_BASE_URL: /${{ github.event.repository.name }}/
         
+      - name: Allow direct access to favorites
+        run: |
+          mkdir -p dist/favoris
+          cp dist/index.html dist/favoris/index.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
