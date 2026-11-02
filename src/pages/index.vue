@@ -17,6 +17,9 @@
       >
         {{ totalGods }} dieux recensés
       </v-chip>
+      <v-chip class="ml-2" color="red-darken-2" prepend-icon="mdi-heart" variant="tonal">
+        {{ godStore.totalFavorites }} favori{{ godStore.totalFavorites > 1 ? 's' : '' }}
+      </v-chip>
     </header>
 
     <div
@@ -134,7 +137,6 @@
           class="h-100"
           hover
           rounded="lg"
-          :to="`/gods/${god.id}`"
         >
           <v-img
             v-if="god.image"
@@ -153,9 +155,18 @@
             {{ god.description }}
           </v-card-text>
           <v-card-actions>
-            <span class="text-amber-darken-3">Voir le portrait</span>
+            <v-btn color="amber-darken-3" :to="`/gods/${god.id}`" variant="text">
+              Voir le portrait
+            </v-btn>
             <v-spacer />
-            <v-icon color="amber-darken-3" icon="mdi-arrow-right" />
+            <v-btn
+              :aria-label="`${godStore.isFavorite(god) ? 'Retirer' : 'Ajouter'} ${god.name} ${godStore.isFavorite(god) ? 'des' : 'aux'} favoris`"
+              :aria-pressed="godStore.isFavorite(god)"
+              color="red-darken-2"
+              :icon="godStore.isFavorite(god) ? 'mdi-heart' : 'mdi-heart-outline'"
+              variant="text"
+              @click="godStore.toggleFavorite(god)"
+            />
           </v-card-actions>
         </v-card>
       </v-col>

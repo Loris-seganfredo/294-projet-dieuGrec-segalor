@@ -70,6 +70,16 @@
             <h1 class="text-h3 font-weight-bold mb-4">
               {{ god.name }}
             </h1>
+            <v-btn
+              :aria-pressed="godStore.isFavorite(god)"
+              class="mb-6"
+              color="red-darken-2"
+              :prepend-icon="godStore.isFavorite(god) ? 'mdi-heart' : 'mdi-heart-outline'"
+              variant="tonal"
+              @click="godStore.toggleFavorite(god)"
+            >
+              {{ godStore.isFavorite(god) ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
+            </v-btn>
             <p class="text-body-1 mb-6">
               {{ god.description }}
             </p>
