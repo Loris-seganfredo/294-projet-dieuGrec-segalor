@@ -1,5 +1,56 @@
 # 🌐 Mon Projet Vue.js & Vuetify
 
+## Étape 17 — Favoris et persistance dans le projet des dieux grecs
+
+La séquence 5 est transposée aux dieux grecs : un cœur permet d'ajouter ou
+de retirer un dieu des favoris depuis les cartes et les fiches détaillées.
+La page **Mes favoris** est accessible depuis le menu.
+
+- Site : https://loris-seganfredo.github.io/294-projet-dieuGrec-segalor/
+- Favoris : https://loris-seganfredo.github.io/294-projet-dieuGrec-segalor/favoris/
+
+### Checklist de réalisation
+
+- [x] `favorites` est un tableau d'IDs dans `src/stores/godStore.js`.
+- [x] `toggleFavorite(god)` ajoute ou retire un ID, puis sauvegarde.
+- [x] `saveFavorites()` utilise `JSON.stringify()` et la clé `god_favorites`.
+- [x] `loadFavorites()` utilise `JSON.parse()` et est appelée dans `init()`.
+- [x] `isFavorite(god)` pilote l'icône, la couleur et l'état accessible du cœur.
+- [x] `getFavorites` retrouve les objets complets et écarte les objets absents.
+- [x] Le cœur utilise `@click.stop.prevent` et ne déclenche pas la navigation.
+- [x] `GodCard.vue` est réutilisé sur l'accueil et dans `favoris.vue`.
+- [x] La page favoris affiche un compteur et une alerte lorsque la liste est vide.
+- [x] Les favoris sont restaurés après rechargement de la page.
+- [x] Les confirmations d'ajout et de retrait disparaissent après deux secondes.
+- [x] Le retrait du dernier favori laisse sa confirmation visible.
+
+Les essais sur la version publiée ont vérifié l'ajout de Zeus, sa présence
+après rechargement de la page favoris, puis son retrait et l'état vide.
+L'animation `heartbeat`, le compteur et l'absence de navigation au clic sur
+le cœur ont également été vérifiés. Aucune erreur ni avertissement n'a été
+relevé dans la console pendant ces essais. La compilation et ESLint sur les
+fichiers modifiés passent ; le lint global contient encore des problèmes
+de mise en forme préexistants dans d'autres fichiers.
+
+### Points à expliquer à l'oral
+
+- Les IDs sont stables et évitent de sauvegarder des copies périmées des dieux.
+- `localStorage` conserve du texte dans le navigateur utilisé. Il ne synchronise
+  pas les appareils et ne remplace pas une base de données.
+- `JSON.stringify()` convertit le tableau en texte ; `JSON.parse()` le restaure.
+- `isFavorite` est un getter qui retourne une fonction prenant un dieu en argument.
+- `getFavorites` utilise `find()` pour retrouver chaque dieu et `filter()` pour
+  exclure les résultats `undefined`.
+- Le pattern toggle ajoute l'ID avec `push()` ou le retire avec `splice()`.
+- `.stop` bloque la propagation du clic ; `.prevent` annule son comportement
+  par défaut. Dans ce projet, le lien « Voir le portrait » est séparé du cœur.
+- Le nettoyage des IDs obsolètes attend la fin du chargement de toutes les pages
+  de l'API, afin de ne pas supprimer un favori encore en cours de chargement.
+
+La réalisation et les vérifications des étapes 12 à 17 ont été assistées par
+Codex. Les éléments ci-dessus décrivent le code et les contrôles effectués,
+sans présumer de la compréhension personnelle de l'élève.
+
 ## 1. 🎨 Présentation du projet
 
 ### Concept
