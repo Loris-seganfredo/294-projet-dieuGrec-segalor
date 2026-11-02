@@ -45,6 +45,29 @@
           variant="outlined"
         />
       </v-col>
+      <v-col cols="12" md="4" sm="6">
+        <v-select
+          v-model="selectedCategory"
+          clearable
+          density="compact"
+          hide-details
+          :items="categories"
+          label="Filtrer par catégorie"
+          prepend-inner-icon="mdi-filter"
+          variant="outlined"
+        />
+      </v-col>
+      <v-col class="d-flex align-center" cols="12" md="4">
+        <v-btn
+          :prepend-icon="sortOrder === 'asc'
+            ? 'mdi-sort-alphabetical-ascending'
+            : 'mdi-sort-alphabetical-descending'"
+          variant="outlined"
+          @click="toggleSort"
+        >
+          Tri {{ sortOrder === 'asc' ? 'A → Z' : 'Z → A' }}
+        </v-btn>
+      </v-col>
     </v-row>
 
     <v-row v-if="isLoading || (!error && !hasLoaded)">
@@ -90,7 +113,7 @@
     </v-alert>
 
     <v-alert
-      v-else-if="filteredBySearch.length === 0"
+      v-else-if="sortedGods.length === 0"
       class="mb-6"
       type="info"
       variant="tonal"
@@ -100,7 +123,7 @@
 
     <v-row v-else>
       <v-col
-        v-for="god in filteredBySearch"
+        v-for="god in sortedGods"
         :key="god.id"
         cols="12"
         lg="3"
@@ -149,14 +172,34 @@
   const godStore = useGodStore()
   const { gods, categories, totalGods, isLoading, hasLoaded, error } = storeToRefs(godStore)
   const searchQuery = ref('')
+  const selectedCategory = ref(null)
+  const sortOrder = ref('asc')
+
+  const filteredByCategory = computed(() => {
+    if (!selectedCategory.value) return gods.value
+    return gods.value.filter(god => god.category === selectedCategory.value)
+  })
 
   const filteredBySearch = computed(() => {
-    if (!searchQuery.value) return gods.value
+    if (!searchQuery.value) return filteredByCategory.value
     const query = searchQuery.value.toLowerCase()
-    return gods.value.filter(god =>
+    return filteredByCategory.value.filter(god =>
       god.name.toLowerCase().includes(query),
     )
   })
+
+  const sortedGods = computed(() => {
+    // L'étape 13 demande sort() : on trie une copie pour préserver le store.
+    // eslint-disable-next-line unicorn/no-array-sort
+    return [...filteredBySearch.value].sort((a, b) => {
+      const comparison = a.name.localeCompare(b.name, 'fr')
+      return sortOrder.value === 'asc' ? comparison : -comparison
+    })
+  })
+
+  function toggleSort () {
+    sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+  }
 
   function godImageUrl (image) {
     return new URL(image, API_ORIGIN).toString()
