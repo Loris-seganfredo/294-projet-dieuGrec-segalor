@@ -1,12 +1,12 @@
 <template>
   <v-container class="py-8">
     <h1 class="text-h3 text-center mb-8">
-      Mes favoris ({{ godStore.totalFavorites }})
+      My favorites ({{ godStore.totalFavorites }})
     </h1>
 
     <v-progress-linear
       v-if="godStore.isLoading || (!godStore.error && !godStore.hasLoaded)"
-      aria-label="Chargement des favoris"
+      aria-label="Loading favorites"
       color="amber-darken-3"
       indeterminate
     />
@@ -14,7 +14,7 @@
       <div class="d-flex align-center justify-space-between flex-wrap ga-3">
         <span>{{ godStore.error }}</span>
         <v-btn :loading="godStore.isLoading" variant="text" @click="godStore.init()">
-          Réessayer
+          Try again
         </v-btn>
       </div>
     </v-alert>
@@ -24,8 +24,8 @@
       type="info"
       variant="tonal"
     >
-      Vous n’avez pas encore de dieux favoris.
-      Cliquez sur le cœur d’un dieu pour l’ajouter !
+      You have no favorites yet.
+      Click the heart on a god to add your first favorite!
     </v-alert>
     <v-row v-else>
       <v-col
@@ -47,4 +47,5 @@
   import { useGodStore } from '@/stores/godStore'
 
   const godStore = useGodStore()
+  definePage({ alias: '/favoris' })
 </script>

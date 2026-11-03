@@ -3,15 +3,15 @@
     <v-btn
       class="mb-4"
       prepend-icon="mdi-arrow-left"
-      to="/"
       variant="text"
+      @click="goBack"
     >
-      Retour à la liste
+      Back
     </v-btn>
 
     <v-progress-linear
       v-if="isLoading || (!error && !hasLoaded)"
-      aria-label="Chargement du dieu"
+      aria-label="Loading god profile"
       class="mb-6"
       color="amber-darken-3"
       indeterminate
@@ -29,7 +29,7 @@
           variant="text"
           @click="godStore.init()"
         >
-          Réessayer
+          Try again
         </v-btn>
       </div>
     </v-alert>
@@ -39,7 +39,7 @@
       type="warning"
       variant="tonal"
     >
-      Ce dieu n’a pas été trouvé.
+      This god could not be found.
     </v-alert>
 
     <v-card
@@ -76,20 +76,20 @@
               color="red-darken-2"
               :prepend-icon="godStore.isFavorite(god) ? 'mdi-heart' : 'mdi-heart-outline'"
               variant="tonal"
-              @click="godStore.toggleFavorite(god)"
+              @click="toggleFavorite"
             >
-              {{ godStore.isFavorite(god) ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
+              {{ godStore.isFavorite(god) ? 'Remove from favorites' : 'Add to favorites' }}
             </v-btn>
             <p class="text-body-1 mb-6">
               {{ god.description }}
             </p>
 
             <p v-if="god.abode" class="mb-6">
-              <strong>Résidence :</strong> {{ god.abode }}
+              <strong>Residence:</strong> {{ god.abode }}
             </p>
 
             <section v-if="god.symbols?.length" class="mb-6">
-              <h2 class="text-h6 mb-2">Symboles</h2>
+              <h2 class="text-h6 mb-2">Symbols</h2>
               <div class="d-flex flex-wrap ga-2">
                 <v-chip
                   v-for="symbol in god.symbols"
@@ -103,14 +103,14 @@
             </section>
 
             <section v-if="god.powers?.length" class="mb-6">
-              <h2 class="text-h6 mb-2">Pouvoirs</h2>
+              <h2 class="text-h6 mb-2">Powers</h2>
               <ul class="pl-5">
                 <li v-for="power in god.powers" :key="power">{{ power }}</li>
               </ul>
             </section>
 
             <section v-if="god.stories?.length" class="mb-6">
-              <h2 class="text-h6 mb-2">Récits associés</h2>
+              <h2 class="text-h6 mb-2">Related stories</h2>
               <ul class="pl-5">
                 <li v-for="story in god.stories" :key="story">{{ story }}</li>
               </ul>
@@ -124,11 +124,11 @@
                 <p>{{ god.parents.join(', ') }}</p>
               </div>
               <div v-if="god.siblings?.length">
-                <h2 class="text-subtitle-1 font-weight-bold">Fratrie</h2>
+                <h2 class="text-subtitle-1 font-weight-bold">Siblings</h2>
                 <p>{{ god.siblings.join(', ') }}</p>
               </div>
               <div v-if="god.spouse?.length">
-                <h2 class="text-subtitle-1 font-weight-bold">Époux ou épouse</h2>
+                <h2 class="text-subtitle-1 font-weight-bold">Spouse</h2>
                 <p>{{ god.spouse.join(', ') }}</p>
               </div>
             </div>
@@ -142,17 +142,27 @@
 <script setup>
   import { storeToRefs } from 'pinia'
   import { computed } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
+  import { useFavoriteFeedback } from '@/composables/favoriteFeedback'
   import { useGodStore } from '@/stores/godStore'
+  import { godImageUrl } from '@/utils/imageUrl'
 
-  const API_ORIGIN = 'https://apis.divtec.me'
   const route = useRoute()
+  const router = useRouter()
+  const { notifyFavorite } = useFavoriteFeedback()
   const godStore = useGodStore()
   const { isLoading, hasLoaded, error } = storeToRefs(godStore)
 
   const god = computed(() => godStore.getGodById(route.params.id))
 
-  function godImageUrl (image) {
-    return new URL(image, API_ORIGIN).toString()
+  function goBack () {
+    if (window.history.state?.back) router.back()
+    else router.push('/')
+  }
+
+  function toggleFavorite () {
+    const wasFavorite = godStore.isFavorite(god.value)
+    godStore.toggleFavorite(god.value)
+    notifyFavorite(wasFavorite)
   }
 </script>

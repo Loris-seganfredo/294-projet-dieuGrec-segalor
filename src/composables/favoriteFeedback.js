@@ -1,12 +1,15 @@
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 
-// Partagé pour garder la confirmation visible après la disparition d'une carte.
+// Keep feedback visible even when removing the last favorite unmounts its card.
 const showSnackbar = ref(false)
 const snackbarMessage = ref('')
 
 export function useFavoriteFeedback () {
-  function notifyFavorite (wasFavorite) {
-    snackbarMessage.value = wasFavorite ? 'Retiré des favoris' : 'Ajouté aux favoris'
+  async function notifyFavorite (wasFavorite) {
+    // Restart the snackbar timeout when several hearts are clicked quickly.
+    showSnackbar.value = false
+    snackbarMessage.value = wasFavorite ? 'Removed from favorites' : 'Added to favorites'
+    await nextTick()
     showSnackbar.value = true
   }
 

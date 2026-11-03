@@ -1,222 +1,76 @@
-# 🌐 Mon Projet Vue.js & Vuetify
+# Greek Gods
 
-## Étape 17 — Favoris et persistance dans le projet des dieux grecs
+A Vue 3 and Vuetify application for exploring Greek mythology. It loads gods from the DIVTEC API, displays their portraits and details, and lets visitors search, filter, sort and save favorites. The interface and API content are in English.
 
-La séquence 5 est transposée aux dieux grecs : un cœur permet d'ajouter ou
-de retirer un dieu des favoris depuis les cartes et les fiches détaillées.
-La page **Mes favoris** est accessible depuis le menu.
+This personal project covers **sequences 1–5 (steps 1–17)** of the [DEV JS Pokédex exercise](https://devjs.ch/exercices/pokedex-vuetify/e1.html). Forms, authentication and API mutations from later sequences are outside its scope.
 
-- Site : https://loris-seganfredo.github.io/294-projet-dieuGrec-segalor/
-- Favoris : https://loris-seganfredo.github.io/294-projet-dieuGrec-segalor/favoris/
+- [Live site](https://loris-seganfredo.github.io/294-projet-dieuGrec-segalor/)
+- [Favorites](https://loris-seganfredo.github.io/294-projet-dieuGrec-segalor/#/favorites)
+- [Source repository](https://github.com/Loris-seganfredo/294-projet-dieuGrec-segalor)
 
-### Checklist de réalisation
+## Run locally
 
-- [x] `favorites` est un tableau d'IDs dans `src/stores/godStore.js`.
-- [x] `toggleFavorite(god)` ajoute ou retire un ID, puis sauvegarde.
-- [x] `saveFavorites()` utilise `JSON.stringify()` et la clé `god_favorites`.
-- [x] `loadFavorites()` utilise `JSON.parse()` et est appelée dans `init()`.
-- [x] `isFavorite(god)` pilote l'icône, la couleur et l'état accessible du cœur.
-- [x] `getFavorites` retrouve les objets complets et écarte les objets absents.
-- [x] Le cœur utilise `@click.stop.prevent` et ne déclenche pas la navigation.
-- [x] `GodCard.vue` est réutilisé sur l'accueil et dans `favoris.vue`.
-- [x] La page favoris affiche un compteur et une alerte lorsque la liste est vide.
-- [x] Les favoris sont restaurés après rechargement de la page.
-- [x] Les confirmations d'ajout et de retrait disparaissent après deux secondes.
-- [x] Le retrait du dernier favori laisse sa confirmation visible.
+Use Node.js 22 or later. From the project directory:
 
-Les essais sur la version publiée ont vérifié l'ajout de Zeus, sa présence
-après rechargement de la page favoris, puis son retrait et l'état vide.
-L'animation `heartbeat`, le compteur et l'absence de navigation au clic sur
-le cœur ont également été vérifiés. Aucune erreur ni avertissement n'a été
-relevé dans la console pendant ces essais. La compilation et ESLint sur les
-fichiers modifiés passent ; le lint global contient encore des problèmes
-de mise en forme préexistants dans d'autres fichiers.
+```sh
+npm ci
+npm run dev
+```
 
-### Points à expliquer à l'oral
+The API defaults to `https://apis.divtec.me/api/greek`. To change it, copy `.env.example` to `.env` and set `VITE_API_URL`, then restart Vite. No API key is required for this public endpoint. Variables beginning with `VITE_` are included in the browser bundle, so they must not contain secrets.
 
-- Les IDs sont stables et évitent de sauvegarder des copies périmées des dieux.
-- `localStorage` conserve du texte dans le navigateur utilisé. Il ne synchronise
-  pas les appareils et ne remplace pas une base de données.
-- `JSON.stringify()` convertit le tableau en texte ; `JSON.parse()` le restaure.
-- `isFavorite` est un getter qui retourne une fonction prenant un dieu en argument.
-- `getFavorites` utilise `find()` pour retrouver chaque dieu et `filter()` pour
-  exclure les résultats `undefined`.
-- Le pattern toggle ajoute l'ID avec `push()` ou le retire avec `splice()`.
-- `.stop` bloque la propagation du clic ; `.prevent` annule son comportement
-  par défaut. Dans ce projet, le lien « Voir le portrait » est séparé du cœur.
-- Le nettoyage des IDs obsolètes attend la fin du chargement de toutes les pages
-  de l'API, afin de ne pas supprimer un favori encore en cours de chargement.
+```sh
+npm run build
+npm run preview
+npx eslint .
+```
 
-La réalisation et les vérifications des étapes 12 à 17 ont été assistées par
-Codex. Les éléments ci-dessus décrivent le code et les contrôles effectués,
-sans présumer de la compréhension personnelle de l'élève.
+`npm run lint` also applies ESLint's automatic fixes.
 
-## 1. 🎨 Présentation du projet
+## Implemented concepts
 
-### Concept
-- API choisie et pourquoi  
-- Public cible  
-- Objectifs de l’application  
+| Sequence | Application |
+| --- | --- |
+| 1 — Components and navigation | Responsive card grid, reusable `GodCard` with a `god` prop, home/about/detail pages and unknown-route handling. |
+| 2 — Pinia | Shared gods, categories and favorites state; getters and actions; initialization from `App.vue`. |
+| 3 — Axios and environment | Central Axios client, configurable API URL, loading/error states, request timeout and retry. |
+| 4 — Search, filter and sort | `v-model` controls and chained computed values: category → search → alphabetical sort. |
+| 5 — Favorites | Favorite IDs, toggle action, JSON/localStorage persistence, reusable cards on a dedicated favorites page and confirmation feedback. |
 
-### Fonctionnalités principales
-- Affichage d’une liste d’éléments (via API)
-- Recherche / Tri / Filtres
-- Vue détail
-- Fonctionnalité interactive (favoris, watchlist, paramètres…)
-- Persistance locale (favoris ou préférences)
+## How it works
 
-### Aperçu visuel
-_(Capture d’écran de l’application)_  
-`![Screenshot de l’application](img/screenshot.png)`
+- `src/stores/godStore.js` loads all API pages and exposes the shared data. Favorites store IDs, not copies of complete god objects.
+- `src/pages/index.vue` derives the displayed list using computed values. Sorting operates on a copy, preserving the store's source order.
+- `src/components/GodCard.vue` displays each god and opens its detail route. The heart uses `@click.stop.prevent`: `.stop` prevents propagation, while `.prevent` cancels the link's default navigation.
+- `src/pages/gods/[id].vue` reads the route ID and retrieves the corresponding god from the store.
+- `src/pages/favorites.vue` reuses `GodCard` and displays an empty-state message when there are no favorites.
+- `src/composables/favoriteFeedback.js` shares confirmation state. The snackbar lives in the layout so removing the last favorite does not destroy its confirmation.
 
----
+`JSON.stringify()` converts the favorite IDs into the text stored under `god_favorites`; `JSON.parse()` restores them. Favorites belong to the current browser and origin, so localhost and GitHub Pages have separate lists. They are not synchronized across devices. Obsolete IDs are removed only after a complete successful API load.
 
-## 2. 📚 Parcours d'apprentissage
+## Deployment and routing
 
-### Ressources utilisées
-#### Documentation & tutos
-- [Vue 3 Docs](https://vuejs.org/guide/introduction.html)
-- [Vuetify Docs](https://vuetifyjs.com/en/components/all/)
-- [Pinia Docs](https://pinia.vuejs.org/)
-- [Public APIs List](https://github.com/public-apis/public-apis)
-- Autres ressources...
+Pushing `main` runs the GitHub Pages workflow. It builds with the repository base path and publishes `dist/`.
 
-#### Progression
-- Semaine 1 : ...
-- Semaine 2 : ...
-- Semaine 3 : ...
-- Semaine 4 : ...
-- ...
+The router uses hash URLs, such as `/#/gods/1`. GitHub Pages therefore serves the same entry page for every route, and refreshing a detail page does not require server rewrite rules or an HTML file for every god.
 
----
+`scripts/create-pages-redirects.mjs` generates compatibility redirects during deployment. Previous clean URLs, including `/favoris/` and `/gods/1`, lead to their hash-route equivalents. `/favoris` remains an alias for `/favorites`. An unknown route displays the application's not-found page.
 
-## 3. 🛠️ Outils et méthodologie
+## Verification checklist
 
-### Environnement de développement
-- **IDE** : VS Code / WebStorm / Autre
-- **Versioning** : Git + GitHub
-- **Dépendances principales** : Vue 3, Vuetify 3, Pinia, Axios/Fetch
-- **Gestion API Keys** : `.env` + `.env.example`
+- The complete API list loads; an unavailable API produces an error message with a retry button.
+- Search is case-insensitive; clearing the field restores the list.
+- Category filtering combines with search and A–Z/Z–A sorting.
+- Clicking a card opens its detail page; clicking the heart only toggles the favorite.
+- Favorite icons and counters update immediately, with brief confirmation messages.
+- Favorites survive a reload and can be removed from the favorites page, including the last item.
+- Home, favorites, detail and unknown routes work after direct navigation and reload.
+- Browser console, production build and ESLint are checked after changes.
 
-### Installation & Run
-- Cloner le repo :...
-- Installer :... 
-- Lancer :...
-- Variables d’environnement : copier `.env.example` → `.env` et compléter les clés nécessaires  
+## Sources and AI assistance
 
-### Méthodologie
-- Découpage en composants réutilisables
-- Props & Emits clairs
-- Store global avec Pinia
-- Commits réguliers et explicites
-- Tests manuels (UI, persistance, erreurs API)
-- ...
+God descriptions, relationships and images come from the [DIVTEC Greek API](https://apis.divtec.me/api/greek/gods). Image availability and content depend on that API.
 
-### Choix techniques
-- API sélectionnée :  
-- Justification du choix :  
-- Endpoints utilisés :  
-- Limites/quotas connus :  
+The project uses [Vue](https://vuejs.org/), [Vue Router](https://router.vuejs.org/), [Pinia](https://pinia.vuejs.org/), [Vuetify](https://vuetifyjs.com/) and [Axios](https://axios-http.com/).
 
-### Architecture (Descriptif + schéma simple + data-flow)
-- `App.vue` : layout principal  
-- `views/` : pages (liste, détail, favoris)  
-- ...
-Outils utiles : Figma / Draw.io / ...
-
-**Data-flow résumé :**  
-- Vue déclenche un **event utilisateur** → composant appelle une fonction du **store** → ...
-
----
-
-## 4. 🧪 Tests et validation
-
-### Tests techniques
-- ✅ Appels API fonctionnels  
-- ✅ Persistance vérifiée après refresh (localStorage)  
-- ✅ Navigation entre les vues OK  
-- ...
-
-### Tests d’UX
-- Navigation intuitive  
-- Recherche/filtre/tri faciles à comprendre  
-- Feedback utilisateur (loading, erreurs, vide)  
-- ...
-
-### Tests d’accessibilité
-- Contraste couleurs (Vuetify par défaut)  
-- Labels et placeholders corrects  
-- Navigation clavier possible  
-- Focus visible  
-- ...
-
-### Tests d’erreurs & fallback
-- API down → **mock fallback** affiché (fichier local ou données simulées)  
-- Liste vide → message clair affiché  
-- Recherche sans résultat → affichage “Aucun élément trouvé”  
-- ...
-
----
-
-## 5. 🤖 Usage d’intelligence artificielle
-
-**⚠️ TRANSPARENCE OBLIGATOIRE** : Si vous utilisez une IA, vous DEVEZ :
-
-### IA utilisée
-- **Nom** : ChatGPT / Claude / GitHub Copilot / Autre  
-- **Version** : _(ex. GPT-4)_  
-- **Contexte** : Aide ponctuelle / Génération de code / Debugging  
-
-### Utilisation détaillée
-**Domaines d'aide :**
-- Aide au code général : X%
-- Génération de snippets Vue/Vuetify : X%  
-- Aide à la structuration du projet : X%
-- Debugging : X%  
-- Recherche d’idées : X%  
-
-**Compréhension et adaptation**
-- Expliquer ce que fait le code généré  
-- Dire comment il a été adapté au projet  
-
-### Parties codées manuellement
-- Composants principaux : X% personnel  
-- Store & persistance : X% personnel  
-- Routing & navigation : X% personnel  
-- Tests & validation : 100% personnel  
-
-### Apprentissage personnel
-- Ce que j’ai appris grâce à l’IA  
-- Comment elle m’a aidé à progresser  
-
----
-
-## 6. 🎯 Bilan personnel
-
-### Ce que j’ai appris
-- Compétences techniques acquises  
-- Découvertes surprenantes  
-- Concepts difficiles maîtrisés  
-
-### Difficultés rencontrées
-- Problèmes techniques et solutions trouvées  
-- Moments de blocage et dépassement  
-- Aide reçue et sources  
-
-### Réussites et fiertés
-- Aspects du projet dont je suis fier  
-- Progrès constatés depuis le début  
-- Envies de développement futur  
-
-### Améliorations possibles
-- Ce que j’ajouterais avec plus de temps  
-- Fonctionnalités bonus envisagées  
-- Compétences à approfondir  
-
----
-
-## 7. 📚 Références & Sources
-- Documentation de l’API : [Nom de l’API](https://...)  
-- Tutos clés utilisés : ...  
-- Usage de l’IA : voir section ci-dessus  
-- Autres ressources utiles : ...
+Codex assisted with implementation, debugging, documentation and verification. This records the assistance used; it does not claim that every part was written manually or that the student has already mastered every concept.

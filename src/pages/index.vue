@@ -2,23 +2,23 @@
   <v-container class="py-8">
     <header class="text-center mb-8">
       <p class="text-overline text-amber-darken-3 mb-2">
-        Mythologie grecque
+        Greek mythology
       </p>
       <h1 class="text-h3 font-weight-bold mb-3">
-        Les dieux grecs
+        Greek Gods
       </h1>
       <p class="text-body-1 text-medium-emphasis mb-4">
-        Découvrez les dieux, leurs récits et les symboles qui leur sont associés.
+        Discover the gods, their stories and the symbols associated with them.
       </p>
       <v-chip
         v-if="hasLoaded && !error"
         color="amber-darken-3"
         variant="tonal"
       >
-        {{ totalGods }} dieux recensés
+        {{ totalGods }} gods in the catalog
       </v-chip>
       <v-chip class="ml-2" color="red-darken-2" prepend-icon="mdi-heart" variant="tonal">
-        {{ godStore.totalFavorites }} favori{{ godStore.totalFavorites > 1 ? 's' : '' }}
+        {{ godStore.totalFavorites }} favorite{{ godStore.totalFavorites === 1 ? '' : 's' }}
       </v-chip>
     </header>
 
@@ -43,7 +43,7 @@
           clearable
           density="compact"
           hide-details
-          label="Rechercher un dieu"
+          label="Search by name"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
         />
@@ -55,7 +55,7 @@
           density="compact"
           hide-details
           :items="categories"
-          label="Filtrer par catégorie"
+          label="Filter by category"
           prepend-inner-icon="mdi-filter"
           variant="outlined"
         />
@@ -68,7 +68,7 @@
           variant="outlined"
           @click="toggleSort"
         >
-          Tri {{ sortOrder === 'asc' ? 'A → Z' : 'Z → A' }}
+          Sort {{ sortOrder === 'asc' ? 'A → Z' : 'Z → A' }}
         </v-btn>
       </v-col>
     </v-row>
@@ -101,7 +101,7 @@
           variant="text"
           @click="godStore.init()"
         >
-          Réessayer
+          Try again
         </v-btn>
       </div>
     </v-alert>
@@ -112,7 +112,7 @@
       type="info"
       variant="tonal"
     >
-      Aucun dieu n’est disponible pour le moment.
+      No gods are available at the moment.
     </v-alert>
 
     <v-alert
@@ -121,7 +121,7 @@
       type="info"
       variant="tonal"
     >
-      Aucun dieu ne correspond à votre recherche.
+      No gods match your search and filters.
     </v-alert>
 
     <v-row v-else>
@@ -158,17 +158,17 @@
 
   const filteredBySearch = computed(() => {
     if (!searchQuery.value) return filteredByCategory.value
-    const query = searchQuery.value.toLowerCase()
+    const query = searchQuery.value.trim().toLowerCase()
     return filteredByCategory.value.filter(god =>
       god.name.toLowerCase().includes(query),
     )
   })
 
   const sortedGods = computed(() => {
-    // L'étape 13 demande sort() : on trie une copie pour préserver le store.
+    // Step 13 uses sort(): copy the array to preserve the store.
     // eslint-disable-next-line unicorn/no-array-sort
     return [...filteredBySearch.value].sort((a, b) => {
-      const comparison = a.name.localeCompare(b.name, 'fr')
+      const comparison = a.name.localeCompare(b.name, 'en')
       return sortOrder.value === 'asc' ? comparison : -comparison
     })
   })

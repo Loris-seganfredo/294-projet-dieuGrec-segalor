@@ -1,5 +1,5 @@
 <template>
-  <v-card class="h-100" hover rounded="lg">
+  <v-card class="h-100" hover rounded="lg" :to="`/gods/${god.id}`">
     <v-img
       v-if="god.image"
       :alt="god.name"
@@ -17,16 +17,14 @@
       {{ god.description }}
     </v-card-text>
     <v-card-actions>
-      <v-btn color="amber-darken-3" :to="`/gods/${god.id}`" variant="text">
-        Voir le portrait
-      </v-btn>
+      <span class="text-amber-darken-3">View profile</span>
       <v-spacer />
       <v-btn
-        :aria-label="`${godStore.isFavorite(god) ? 'Retirer' : 'Ajouter'} ${god.name} ${godStore.isFavorite(god) ? 'des' : 'aux'} favoris`"
-        :aria-pressed="godStore.isFavorite(god)"
-        :class="{ 'favorite-active': godStore.isFavorite(god) }"
-        :color="godStore.isFavorite(god) ? 'red-darken-2' : 'grey'"
-        :icon="godStore.isFavorite(god) ? 'mdi-heart' : 'mdi-heart-outline'"
+        :aria-label="`${isFavorite ? 'Remove' : 'Add'} ${god.name} ${isFavorite ? 'from' : 'to'} favorites`"
+        :aria-pressed="isFavorite"
+        :class="{ 'favorite-active': isFavorite }"
+        :color="isFavorite ? 'red-darken-2' : 'grey'"
+        :icon="isFavorite ? 'mdi-heart' : 'mdi-heart-outline'"
         variant="text"
         @click.stop.prevent="handleToggleFavorite"
       />
@@ -35,13 +33,16 @@
 </template>
 
 <script setup>
+  import { computed } from 'vue'
   import { useFavoriteFeedback } from '@/composables/favoriteFeedback'
   import { useGodStore } from '@/stores/godStore'
+  import { godImageUrl } from '@/utils/imageUrl'
 
   const props = defineProps({
     god: { type: Object, required: true },
   })
   const godStore = useGodStore()
+  const isFavorite = computed(() => godStore.isFavorite(props.god))
   const { notifyFavorite } = useFavoriteFeedback()
 
   function handleToggleFavorite () {
@@ -50,9 +51,6 @@
     notifyFavorite(wasFavorite)
   }
 
-  function godImageUrl (image) {
-    return new URL(image, 'https://apis.divtec.me').toString()
-  }
 </script>
 
 <style scoped>

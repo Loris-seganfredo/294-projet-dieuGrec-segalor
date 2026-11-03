@@ -25,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
           cache: 'npm'
           
       - name: Install dependencies
@@ -36,10 +36,10 @@ jobs:
         env:
           VITE_BASE_URL: /${{ github.event.repository.name }}/
         
-      - name: Allow direct access to favorites
-        run: |
-          mkdir -p dist/favoris
-          cp dist/index.html dist/favoris/index.html
+      - name: Keep existing page links working
+        run: node scripts/create-pages-redirects.mjs
+        env:
+          VITE_BASE_URL: /${{ github.event.repository.name }}/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

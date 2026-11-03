@@ -8,8 +8,10 @@ async function fetchGodsPage (page) {
 
   const json = response.data
 
-  if (!Array.isArray(json.data)) {
-    throw new TypeError(`La réponse de l'API ne contient pas une liste de dieux valide (page ${page})`)
+  if (!Array.isArray(json?.data) || json.data.some(god =>
+    !god || !Number.isSafeInteger(god.id) || god.id <= 0 || typeof god.name !== 'string',
+  )) {
+    throw new TypeError(`The API returned invalid gods data (page ${page}).`)
   }
 
   return json
@@ -23,6 +25,7 @@ export const useGodStore = defineStore('gods', {
     isLoading: false,
     hasLoaded: false,
     error: null,
+    favoritesError: null,
   }),
 
   getters: {
@@ -40,14 +43,15 @@ export const useGodStore = defineStore('gods', {
 
   actions: {
     loadFavorites () {
+      this.favoritesError = null
       try {
         const savedFavorites = localStorage.getItem('god_favorites')
         const favorites = savedFavorites ? JSON.parse(savedFavorites) : []
         this.favorites = Array.isArray(favorites)
-          ? [...new Set(favorites.filter(id => Number.isInteger(id) && id > 0))]
+          ? [...new Set(favorites.filter(id => Number.isSafeInteger(id) && id > 0))]
           : []
-      } catch (error) {
-        console.error('Erreur lors du chargement des favoris :', error)
+      } catch {
+        this.favoritesError = 'Favorites could not be restored from this browser.'
         this.favorites = []
       }
     },
@@ -55,15 +59,17 @@ export const useGodStore = defineStore('gods', {
     saveFavorites () {
       try {
         localStorage.setItem('god_favorites', JSON.stringify(this.favorites))
-      } catch (error) {
-        console.error('Erreur lors de la sauvegarde des favoris :', error)
+        this.favoritesError = null
+      } catch {
+        this.favoritesError = 'Browser storage is unavailable. Favorites will only last for this session.'
       }
     },
 
     toggleFavorite (god) {
-      // findIndex() fait partie des méthodes à pratiquer à l'étape 15.
-      // eslint-disable-next-line unicorn/prefer-array-index-of
-      const index = this.favorites.findIndex(id => id === god.id)
+      if (!Number.isSafeInteger(god?.id) || god.id <= 0) {
+        return
+      }
+      const index = this.favorites.indexOf(god.id)
       if (index === -1) {
         this.favorites.push(god.id)
       } else {
@@ -107,13 +113,14 @@ export const useGodStore = defineStore('gods', {
       this.error = null
 
       try {
-        // Restaurer avant le chargement ; nettoyer seulement après la dernière page.
+        // Restore first; clean obsolete IDs only after every API page succeeds.
         this.loadFavorites()
         await this.fetchGods()
         this.hasLoaded = true
       } catch (error) {
-        this.error = error instanceof Error ? error.message : 'Une erreur est survenue'
-        console.error(error)
+        this.error = error instanceof TypeError
+          ? error.message
+          : 'Unable to load the gods. Check your connection and try again.'
       } finally {
         this.isLoading = false
       }
