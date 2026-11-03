@@ -49,20 +49,18 @@
     >
       <v-row no-gutters>
         <v-col
-          v-if="god.image"
           cols="12"
           md="5"
         >
-          <v-img
-            :alt="god.name"
-            cover
+          <GodImage
             height="100%"
+            :image="god.image"
             min-height="320"
-            :src="godImageUrl(god.image)"
+            :name="god.name"
           />
         </v-col>
 
-        <v-col cols="12" :md="god.image ? 7 : 12">
+        <v-col cols="12" md="7">
           <v-card-text class="pa-6 pa-md-8">
             <p class="text-overline text-amber-darken-3 mb-1">
               {{ god.category }}<span v-if="god.origin"> · {{ god.origin }}</span>
@@ -143,9 +141,9 @@
   import { storeToRefs } from 'pinia'
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
+  import GodImage from '@/components/GodImage.vue'
   import { useFavoriteFeedback } from '@/composables/favoriteFeedback'
   import { useGodStore } from '@/stores/godStore'
-  import { godImageUrl } from '@/utils/imageUrl'
 
   const route = useRoute()
   const router = useRouter()

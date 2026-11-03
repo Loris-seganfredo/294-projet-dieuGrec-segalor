@@ -1,0 +1,26 @@
+<template>
+  <v-img
+    :key="src"
+    :alt="isDefault ? `Greek temple illustration — portrait unavailable for ${name}` : name"
+    cover
+    :src="src"
+    @error="imageFailed = true"
+  />
+</template>
+
+<script setup>
+  import { computed, ref, watch } from 'vue'
+  import { defaultGodImage, godImageUrl } from '@/utils/imageUrl'
+
+  const props = defineProps({
+    image: { type: String, default: '' },
+    name: { type: String, required: true },
+  })
+  const imageFailed = ref(false)
+  const src = computed(() => imageFailed.value ? defaultGodImage : godImageUrl(props.image))
+  const isDefault = computed(() => src.value === defaultGodImage)
+
+  watch(() => props.image, () => {
+    imageFailed.value = false
+  })
+</script>

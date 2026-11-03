@@ -1,11 +1,9 @@
 <template>
   <v-card class="h-100" hover rounded="lg" :to="`/gods/${god.id}`">
-    <v-img
-      v-if="god.image"
-      :alt="god.name"
-      cover
+    <GodImage
       height="190"
-      :src="godImageUrl(god.image)"
+      :image="god.image"
+      :name="god.name"
     />
     <v-card-item>
       <v-card-title>{{ god.name }}</v-card-title>
@@ -34,9 +32,9 @@
 
 <script setup>
   import { computed } from 'vue'
+  import GodImage from '@/components/GodImage.vue'
   import { useFavoriteFeedback } from '@/composables/favoriteFeedback'
   import { useGodStore } from '@/stores/godStore'
-  import { godImageUrl } from '@/utils/imageUrl'
 
   const props = defineProps({
     god: { type: Object, required: true },
