@@ -1,21 +1,5 @@
 import { defineStore } from 'pinia'
-import api from '@/plugins/axios'
-
-async function fetchGodsPage (page) {
-  const response = await api.get('/gods', {
-    params: { page },
-  })
-
-  const json = response.data
-
-  if (!Array.isArray(json?.data) || json.data.some(god =>
-    !god || !Number.isSafeInteger(god.id) || god.id <= 0 || typeof god.name !== 'string',
-  )) {
-    throw new TypeError(`The API returned invalid gods data (page ${page}).`)
-  }
-
-  return json
-}
+import { getGods } from '@/services/godApi'
 
 export const useGodStore = defineStore('gods', {
   state: () => ({
@@ -87,18 +71,7 @@ export const useGodStore = defineStore('gods', {
     },
 
     async fetchGods () {
-      const firstPage = await fetchGodsPage(1)
-      const gods = [...firstPage.data]
-      const reportedPageCount = Number(firstPage.pagination?.pages)
-      const pageCount = Number.isInteger(reportedPageCount) && reportedPageCount > 0
-        ? reportedPageCount
-        : 1
-
-      for (let page = 2; page <= pageCount; page += 1) {
-        const nextPage = await fetchGodsPage(page)
-        gods.push(...nextPage.data)
-      }
-
+      const gods = await getGods()
       this.gods = gods
       this.categories = [...new Set(gods.map(god => god.category).filter(Boolean))]
       this.cleanupFavorites()

@@ -7,7 +7,7 @@
     <v-progress-linear
       v-if="godStore.isLoading || (!godStore.error && !godStore.hasLoaded)"
       aria-label="Loading favorites"
-      color="amber-darken-3"
+      color="primary"
       indeterminate
     />
     <v-alert v-else-if="godStore.error" class="mb-6" type="error" variant="tonal">
@@ -36,7 +36,11 @@
         md="4"
         sm="6"
       >
-        <GodCard :god="god" />
+        <GodCard
+          :god="god"
+          :is-favorite="godStore.isFavorite(god)"
+          @toggle-favorite="toggleFavorite"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -44,8 +48,10 @@
 
 <script setup>
   import GodCard from '@/components/GodCard.vue'
+  import { useFavoriteFeedback } from '@/composables/favoriteFeedback'
   import { useGodStore } from '@/stores/godStore'
 
   const godStore = useGodStore()
+  const { toggleFavorite } = useFavoriteFeedback()
   definePage({ alias: '/favoris' })
 </script>

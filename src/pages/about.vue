@@ -14,6 +14,6 @@
       The catalog reflects the API's names and categories, including a few Roman deities.
       Development and testing were assisted by Codex.
     </p>
-    <v-btn color="amber-darken-3" prepend-icon="mdi-home" to="/">Explore the gods</v-btn>
+    <v-btn color="primary" prepend-icon="mdi-home" to="/">Explore the gods</v-btn>
   </v-container>
 </template>

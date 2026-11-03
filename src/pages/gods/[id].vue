@@ -13,7 +13,7 @@
       v-if="isLoading || (!error && !hasLoaded)"
       aria-label="Loading god profile"
       class="mb-6"
-      color="amber-darken-3"
+      color="primary"
       indeterminate
     />
 
@@ -62,7 +62,7 @@
 
         <v-col cols="12" md="7">
           <v-card-text class="pa-6 pa-md-8">
-            <p class="text-overline text-amber-darken-3 mb-1">
+            <p class="text-overline text-primary mb-1">
               {{ god.category }}<span v-if="god.origin"> · {{ god.origin }}</span>
             </p>
             <h1 class="text-h3 font-weight-bold mb-4">
@@ -71,10 +71,10 @@
             <v-btn
               :aria-pressed="godStore.isFavorite(god)"
               class="mb-6"
-              color="red-darken-2"
+              color="favorite"
               :prepend-icon="godStore.isFavorite(god) ? 'mdi-heart' : 'mdi-heart-outline'"
               variant="tonal"
-              @click="toggleFavorite"
+              @click="toggleFavorite(god)"
             >
               {{ godStore.isFavorite(god) ? 'Remove from favorites' : 'Add to favorites' }}
             </v-btn>
@@ -92,7 +92,7 @@
                 <v-chip
                   v-for="symbol in god.symbols"
                   :key="symbol"
-                  color="amber-darken-3"
+                  color="primary"
                   variant="tonal"
                 >
                   {{ symbol }}
@@ -147,7 +147,7 @@
 
   const route = useRoute()
   const router = useRouter()
-  const { notifyFavorite } = useFavoriteFeedback()
+  const { toggleFavorite } = useFavoriteFeedback()
   const godStore = useGodStore()
   const { isLoading, hasLoaded, error } = storeToRefs(godStore)
 
@@ -156,11 +156,5 @@
   function goBack () {
     if (window.history.state?.back) router.back()
     else router.push('/')
-  }
-
-  function toggleFavorite () {
-    const wasFavorite = godStore.isFavorite(god.value)
-    godStore.toggleFavorite(god.value)
-    notifyFavorite(wasFavorite)
   }
 </script>

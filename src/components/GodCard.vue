@@ -7,7 +7,7 @@
     />
     <v-card-item>
       <v-card-title>{{ god.name }}</v-card-title>
-      <v-card-subtitle>
+      <v-card-subtitle class="text-medium-emphasis" :opacity="1">
         {{ god.category }}<span v-if="god.origin"> · {{ god.origin }}</span>
       </v-card-subtitle>
     </v-card-item>
@@ -15,40 +15,30 @@
       {{ god.description }}
     </v-card-text>
     <v-card-actions>
-      <span class="text-amber-darken-3">View profile</span>
+      <span class="text-primary">View profile</span>
       <v-spacer />
       <v-btn
         :aria-label="`${isFavorite ? 'Remove' : 'Add'} ${god.name} ${isFavorite ? 'from' : 'to'} favorites`"
         :aria-pressed="isFavorite"
         :class="{ 'favorite-active': isFavorite }"
-        :color="isFavorite ? 'red-darken-2' : 'grey'"
+        :color="isFavorite ? 'favorite' : 'secondary'"
         :icon="isFavorite ? 'mdi-heart' : 'mdi-heart-outline'"
         variant="text"
-        @click.stop.prevent="handleToggleFavorite"
+        @click.stop.prevent="emit('toggle-favorite', god)"
       />
     </v-card-actions>
   </v-card>
 </template>
 
 <script setup>
-  import { computed } from 'vue'
   import GodImage from '@/components/GodImage.vue'
-  import { useFavoriteFeedback } from '@/composables/favoriteFeedback'
-  import { useGodStore } from '@/stores/godStore'
 
-  const props = defineProps({
+  defineProps({
     god: { type: Object, required: true },
+    isFavorite: { type: Boolean, required: true },
   })
-  const godStore = useGodStore()
-  const isFavorite = computed(() => godStore.isFavorite(props.god))
-  const { notifyFavorite } = useFavoriteFeedback()
-
-  function handleToggleFavorite () {
-    const wasFavorite = godStore.isFavorite(props.god)
-    godStore.toggleFavorite(props.god)
-    notifyFavorite(wasFavorite)
-  }
-
+  // Props flow down from the page; user actions are emitted back to it.
+  const emit = defineEmits(['toggle-favorite'])
 </script>
 
 <style scoped>

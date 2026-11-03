@@ -17,4 +17,5 @@
 
 <style lang="scss">
 @use '@/styles/favorites.scss';
+@use '@/styles/accessibility.scss';
 </style>

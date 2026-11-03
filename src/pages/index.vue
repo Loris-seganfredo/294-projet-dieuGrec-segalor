@@ -1,7 +1,7 @@
 <template>
   <v-container class="py-8">
     <header class="text-center mb-8">
-      <p class="text-overline text-amber-darken-3 mb-2">
+      <p class="text-overline text-primary mb-2">
         Greek mythology
       </p>
       <h1 class="text-h3 font-weight-bold mb-3">
@@ -12,12 +12,12 @@
       </p>
       <v-chip
         v-if="hasLoaded && !error"
-        color="amber-darken-3"
+        color="primary"
         variant="tonal"
       >
         {{ totalGods }} gods in the catalog
       </v-chip>
-      <v-chip class="ml-2" color="red-darken-2" prepend-icon="mdi-heart" variant="tonal">
+      <v-chip class="ml-2" color="favorite" prepend-icon="mdi-heart" variant="tonal">
         {{ godStore.totalFavorites }} favorite{{ godStore.totalFavorites === 1 ? '' : 's' }}
       </v-chip>
     </header>
@@ -73,7 +73,11 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="isLoading || (!error && !hasLoaded)">
+    <v-row
+      v-if="isLoading || (!error && !hasLoaded)"
+      aria-label="Loading gods"
+      role="status"
+    >
       <v-col
         v-for="n in 8"
         :key="n"
@@ -83,6 +87,7 @@
         sm="6"
       >
         <v-skeleton-loader
+          aria-hidden="true"
           height="350"
           type="image, article"
         />
@@ -133,7 +138,11 @@
         md="4"
         sm="6"
       >
-        <GodCard :god="god" />
+        <GodCard
+          :god="god"
+          :is-favorite="godStore.isFavorite(god)"
+          @toggle-favorite="toggleFavorite"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -143,9 +152,11 @@
   import { storeToRefs } from 'pinia'
   import { computed, ref } from 'vue'
   import GodCard from '@/components/GodCard.vue'
+  import { useFavoriteFeedback } from '@/composables/favoriteFeedback'
   import { useGodStore } from '@/stores/godStore'
 
   const godStore = useGodStore()
+  const { toggleFavorite } = useFavoriteFeedback()
   const { gods, categories, totalGods, isLoading, hasLoaded, error } = storeToRefs(godStore)
   const searchQuery = ref('')
   const selectedCategory = ref(null)

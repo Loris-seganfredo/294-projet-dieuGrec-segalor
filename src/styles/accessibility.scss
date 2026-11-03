@@ -1,0 +1,7 @@
+// Keep keyboard focus clearly visible on both light and dark surfaces.
+.v-btn:focus-visible,
+.v-card--link:focus-visible {
+  outline: 3px solid rgb(var(--v-theme-primary));
+  outline-offset: 3px;
+}
+
