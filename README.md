@@ -1,143 +1,210 @@
 # Greek Gods
 
-A Vue 3 and Vuetify application for exploring Greek mythology. It loads gods from the DIVTEC API, displays their portraits and details, and lets visitors search, filter, sort and save favorites. The interface and API content are in English.
+[Live application on Vercel](https://294-projet-dieu-grec-segalor.vercel.app/) · [GitHub Pages](https://loris-seganfredo.github.io/294-projet-dieuGrec-segalor/) · [Source code](https://github.com/Loris-seganfredo/294-projet-dieuGrec-segalor)
 
-This personal project covers **sequences 1–5 (steps 1–17)** of the [DEV JS Pokédex exercise](https://devjs.ch/exercices/pokedex-vuetify/e1.html). Forms, authentication and API mutations from later sequences are outside its scope.
+This Vue 3 and Vuetify project follows the [individual assessment brief](https://tirtho.notion.site/Projet-individuel-valuatif-Application-Vue-3-Vuetify-avec-API-268e74c07f7c80e5822adb530f7a6027) and the DEV JS exercises through **sequence 5, steps 1–17**. The interface and content are in English. Forms, authentication and API mutations from later sequences are outside this delivery.
 
-- [Live site](https://loris-seganfredo.github.io/294-projet-dieuGrec-segalor/)
-- [Favorites](https://loris-seganfredo.github.io/294-projet-dieuGrec-segalor/#/favorites)
-- [Source repository](https://github.com/Loris-seganfredo/294-projet-dieuGrec-segalor)
+## 1. Project presentation
 
-## Purpose and audience
+### Concept
 
-The application is a small reference catalog for students and visitors discovering mythology. A visitor can find a deity, read its profile and keep a personal selection in the browser. The Greek mythology data adapts the course's Pokémon examples to a different subject.
+Greek Gods is a reference catalog for students and visitors discovering mythology. Visitors can find a deity, read its profile and save a personal selection. The public DIVTEC API provides names, categories, descriptions, portraits and relationships without an API key.
 
-## Screenshots
+The project adapts the course's Pokémon examples to Greek mythology. The student's personal reason for choosing this subject still needs to be recorded in section 6.
 
-Desktop, with four cards per row:
+### Main features
+
+- A responsive catalog with portraits, names and descriptions.
+- Case-insensitive name search, category filtering and A–Z/Z–A sorting.
+- Detailed profiles, an About page and unknown-page handling.
+- Favorites with immediate visual feedback and browser persistence.
+- Loading indicators, network errors with retry and empty-state messages.
+- A default Greek temple illustration for missing or failed portraits.
+- Keyboard focus indicators and contrasting colors for light and dark system themes.
+
+### Screenshots
 
 ![Greek Gods on desktop](docs/screenshots/home-desktop.png)
 
-[Mobile screenshot — one card per row](docs/screenshots/home-mobile.png)
+[Mobile screenshot](docs/screenshots/home-mobile.png) · [Dark theme screenshot](docs/screenshots/home-dark.png)
 
-These screenshots were taken from the running application during the 3 November 2026 audit.
+## 2. Learning path
 
-## Run locally
+### Resources
 
-Use Node.js 22 or later. From the project directory:
+The main learning material is the [DEV JS Pokédex exercise](https://devjs.ch/exercices/pokedex-vuetify/e1.html), adapted to the Greek API. Official Vue, Vuetify, Pinia, Vue Router and Axios documentation supports the implementation. Links are collected in section 7.
+
+### Recorded progression
+
+The dates below come from Git. They show the project's development, rather than proving individual learning or attendance at weekly meetings.
+
+| Date | Recorded work |
+| --- | --- |
+| 22 September 2026 | Initial project skeleton. |
+| 20 October | Pinia store, list/detail integration, complete API pagination and GitHub Pages base path. |
+| 26 October | Axios configuration, environment variables, loading indicators and error handling. |
+| 2 November | Search, category filter, alphabetical sorting and persistent favorites. |
+| 3 November | English interface, routing fixes, fallback images, exercise audit, then comparison with the actual assessment brief. Props/emits, API service separation, contrast and keyboard focus were improved. |
+
+The student's own account of resources studied, difficult concepts and progress is still to be supplied. Weekly teacher meetings are required by the brief; the repository does not establish whether they took place.
+
+## 3. Tools and methodology
+
+### Environment
+
+- Vue 3, Vuetify 3, Pinia, Vue Router, Axios and Vite.
+- npm for dependency installation; ESLint for code checks.
+- Git and GitHub for version history; Vercel and GitHub Pages for publication.
+- OpenAI Codex desktop for the assisted implementation, review and testing described in section 5.
+
+### Installation and run
+
+Use Node.js 22 or later:
 
 ```sh
+git clone https://github.com/Loris-seganfredo/294-projet-dieuGrec-segalor.git
+cd 294-projet-dieuGrec-segalor
 npm ci
 npm run dev
 ```
 
-The API defaults to `https://apis.divtec.me/api/greek`. To change it, copy `.env.example` to `.env` and set `VITE_API_URL`, then restart Vite. No API key is required for this public endpoint. Variables beginning with `VITE_` are included in the browser bundle, so they must not contain secrets.
+Vite normally starts at `http://localhost:3000/`. Use the URL printed in the terminal if that port is occupied. Stop it with `Ctrl+C`. A separate API server is not needed.
 
-Vite starts at `http://localhost:3000/` if that port is free. Use the URL printed in the terminal. Stop the local server with `Ctrl+C`; a separate API server is not needed.
+To change the API address, copy `.env.example` to `.env`, set `VITE_API_URL` and restart Vite. The default is `https://apis.divtec.me/api/greek`. No API key is required. `.env` is ignored by Git; `.env.example` is tracked. Variables starting with `VITE_` are public in the browser bundle and must not contain secrets.
 
 ```sh
+npx eslint .
 npm run build
 npm run preview
-npx eslint .
 ```
 
-`npm run lint` also applies ESLint's automatic fixes.
+`npm run lint` also applies automatic ESLint fixes.
 
-## Implemented concepts
+### Components, props and events
 
-| Sequence | Application |
-| --- | --- |
-| 1 — Components and navigation | Responsive card grid, reusable `GodCard` with a `god` prop, home/about/detail pages and unknown-route handling. |
-| 2 — Pinia | Shared gods, categories and favorites state; getters and actions; initialization from `App.vue`. |
-| 3 — Axios and environment | Central Axios client, configurable API URL, loading/error states, request timeout and retry. |
-| 4 — Search, filter and sort | `v-model` controls and chained computed values: category → search → alphabetical sort. |
-| 5 — Favorites | Favorite IDs, toggle action, JSON/localStorage persistence, reusable cards on a dedicated favorites page and confirmation feedback. |
+`GodCard` receives two required props: `god` and `isFavorite`. It emits `toggle-favorite` with the selected god. The home and favorites pages handle that event through `useFavoriteFeedback()`, which calls the store action and updates the shared snackbar state. There is no global event bus.
 
-## How it works
+The heart uses `@click.stop.prevent`: `.stop` stops propagation to the card and `.prevent` cancels the linked card's default navigation. The detail page uses the same favorite handler. `GodImage` is reused for portraits and fallback illustrations. `AppFooter` receives its text through a slot.
 
-- `src/stores/godStore.js` loads all API pages and exposes the shared data. Favorites store IDs, not copies of complete god objects.
-- `src/pages/index.vue` derives the displayed list using computed values. Sorting operates on a copy, preserving the store's source order.
-- `src/components/GodCard.vue` displays each god and opens its detail route. The heart uses `@click.stop.prevent`: `.stop` prevents propagation, while `.prevent` cancels the link's default navigation.
-- `src/pages/gods/[id].vue` reads the route ID and retrieves the corresponding god from the store.
-- `src/pages/favorites.vue` reuses `GodCard` and displays an empty-state message when there are no favorites.
-- `src/components/GodImage.vue` displays the API portrait or a bundled Greek temple illustration when the URL is missing or the image fails to load.
-- `src/composables/favoriteFeedback.js` shares confirmation state. The snackbar lives in the layout so removing the last favorite does not destroy its confirmation.
-
-`JSON.stringify()` converts the favorite IDs into the text stored under `god_favorites`; `JSON.parse()` restores them. Favorites belong to the current browser and origin, so localhost and GitHub Pages have separate lists. They are not synchronized across devices. Obsolete IDs are removed only after a complete successful API load.
-
-## API and data flow
-
-The public DIVTEC Greek API was selected because it provides names, categories, descriptions, portraits and relationships for the project's subject without requiring authentication.
+### API choices and limits
 
 | Resource used | Purpose |
 | --- | --- |
-| `GET https://apis.divtec.me/api/greek/gods?page=1` | Load the first page and read `pagination.pages`. |
-| `GET /gods?page=2`, then subsequent pages on the same API base | Load the complete catalog before publishing it to the store. |
-| Image paths returned by the API, resolved against `https://apis.divtec.me` | Display available portraits. |
+| `GET https://apis.divtec.me/api/greek/gods?page=1` | Load the first page and read the page count. |
+| `GET /gods?page=2`, then subsequent pages on the same base | Load the entire catalog before updating the store. |
+| Image paths from the response, resolved against `https://apis.divtec.me` | Load portraits. |
 
-The list response contains `data` and `pagination`. The audit found 51 entries over three pages; this is observed API data, not a hard-coded count. Detail pages use `getGodById()` from the loaded store, so they do not make another detail request. Categories are derived from the same catalog.
+The response contains `data` and `pagination`. During verification it contained 51 entries over three pages. The count is not hard-coded. Categories are derived from the loaded objects; detail pages use the store's `getGodById()` instead of making another request.
+
+Requests have a ten-second timeout. No API quota guarantee has been verified. A failed request produces an error with a retry button. No partial catalog is published after a failed page. Favorites are cleaned only after every API page succeeds.
+
+The brief explicitly waives the mock/offline requirement for **2026–2027**. This application therefore displays an honest error instead of silently substituting fictional data.
+
+### Architecture and data flow
+
+| Location | Responsibility |
+| --- | --- |
+| `src/plugins/axios.js` | Shared Axios client and environment configuration. |
+| `src/services/godApi.js` | HTTP requests, response validation and pagination. |
+| `src/stores/godStore.js` | Shared state, getters, initialization and favorite persistence. |
+| `src/pages/` | Home, detail, favorites, About and not-found views. |
+| `src/components/` | Reusable card, image, header and footer. |
+| `src/composables/favoriteFeedback.js` | Favorite action with shared confirmation feedback. |
+| `src/plugins/vuetify.js`, `src/styles/` | Theme colors, keyboard focus and animation. |
 
 ```mermaid
 flowchart TD
-    App[App.vue onMounted] --> Init[godStore.init]
-    Init --> Restore[Restore favorite IDs]
-    Init --> Axios[Shared Axios client]
-    Axios --> API[Paginated DIVTEC API]
-    API --> Store[Pinia gods and categories]
-    Store --> Filter[Category computed]
-    Filter --> Search[Search computed]
-    Search --> Sort[Sort a copied array]
-    Sort --> Cards[GodCard on home]
-    Store --> Detail[Detail page by route ID]
-    Store --> FavoriteObjects[getFavorites]
-    FavoriteObjects --> FavoriteCards[GodCard on favorites]
-    Cards --> Toggle[toggleFavorite action]
-    FavoriteCards --> Toggle
-    Toggle --> Storage[JSON favorite IDs in localStorage]
-    Storage --> Restore
+    App[App.vue initializes once] --> Store[Pinia store]
+    Store --> Service[godApi service]
+    Service --> Axios[Axios client]
+    Axios --> API[DIVTEC API pages]
+    API --> Store
+    Store --> Computed[Category then search then sort]
+    Computed --> Page[Home page]
+    Store --> Favorites[Favorites page]
+    Page -->|god and isFavorite props| Card[GodCard]
+    Favorites -->|god and isFavorite props| Card
+    Card -->|toggle-favorite event| Handler[Page handler]
+    Handler --> Action[Store toggleFavorite]
+    Action --> Storage[JSON IDs in localStorage]
+    Handler --> Snackbar[Shared confirmation]
+    Store --> Detail[Profile selected by route ID]
 ```
 
-API availability and content are external dependencies. No quota guarantee has been verified. Requests have a ten-second timeout; an error is displayed with a retry button. The app does not silently replace a failed API response with fictional data. Favorite storage can be unavailable or cleared by browser settings, and users are warned when persistence fails.
+The computed chain derives a view of the store. Sorting uses a copied array, so it cannot reorder the source. Favorites store numeric IDs, not entire objects. `JSON.stringify()` writes them under `god_favorites`; `JSON.parse()` restores them.
 
-## Deployment and routing
+### Versioning and publication
 
-Pushing `main` runs the GitHub Pages workflow. It builds with the repository base path and publishes `dist/`.
+Work is committed by feature or correction and pushed to `main`. The 2026–2027 brief explicitly permits using `main` without weekly milestone branches. The historical commits have been preserved.
 
-The router uses hash URLs, such as `/#/gods/1`. GitHub Pages therefore serves the same entry page for every route, and refreshing a detail page does not require server rewrite rules or an HTML file for every god.
+GitHub Pages builds with the repository base path. Hash routes such as `/#/gods/1` support direct access and reloading on static hosting. The deployment script keeps older clean URLs working through redirects; `/favoris` remains an alias for `/favorites`.
 
-`scripts/create-pages-redirects.mjs` generates compatibility redirects during deployment. Previous clean URLs, including `/favoris/` and `/gods/1`, lead to their hash-route equivalents. `/favoris` remains an alias for `/favorites`. An unknown route displays the application's not-found page.
+## 4. Tests and validation
 
-## Verification checklist
+The [assessment audit](docs/assessment-audit.md) maps the actual brief to evidence and records remaining personal requirements. The [earlier exercise audit](docs/exam-audit.md) covers the sequence 1–5 baseline only.
 
-- The complete API list loads; an unavailable API produces an error message with a retry button.
-- Search is case-insensitive; clearing the field restores the list.
-- Category filtering combines with search and A–Z/Z–A sorting.
-- Clicking a card opens its detail page; clicking the heart only toggles the favorite.
-- Favorite icons and counters update immediately, with brief confirmation messages.
-- Favorites survive a reload and can be removed from the favorites page, including the last item.
-- Home, favorites, detail and unknown routes work after direct navigation and reload.
-- Browser console, production build and ESLint are checked after changes.
+The verification covers:
 
-The [sequence 1–5 audit](docs/exam-audit.md) records the criteria checked, runtime evidence and the boundaries of this verification.
+- Complete real-API loading, pagination, malformed responses, partial failure and retry.
+- Search, filter and sort combinations without mutating source data.
+- Card navigation, favorite events, persistence after reload and removal of the last favorite.
+- Keyboard activation with Tab, Enter and Space; visible focus on navigation, cards, buttons and fields.
+- Text and control contrast in light and dark themes, including tonal messages.
+- Mobile and desktop layouts, missing images, invalid IDs and unknown pages.
+- ESLint, production build, deployment status and the running public pages.
 
-## Sources and AI assistance
+The API service/store and shared favorite feedback were also checked with isolated Node scripts using the actual sources, real Vue/Pinia and simulated API/storage. These checks were assisted by Codex; they are not claimed as tests personally written or performed by the student.
 
-God descriptions, relationships and images come from the [DIVTEC Greek API](https://apis.divtec.me/api/greek/gods). Image availability and content depend on that API.
+## 5. Use of artificial intelligence
 
-The project uses [Vue](https://vuejs.org/), [Vue Router](https://router.vuejs.org/), [Pinia](https://pinia.vuejs.org/), [Vuetify](https://vuetifyjs.com/) and [Axios](https://axios-http.com/).
+### Tool and context
 
-Codex assisted with implementation, debugging, documentation and verification. This records the assistance used; it does not claim that every part was written manually or that the student has already mastered every concept.
+OpenAI Codex was used through the desktop application for implementation, explanations, debugging, source review, documentation and tests. Exact model versions used throughout earlier sessions were not recorded. Reliable authorship percentages are not available, so no percentages are invented.
 
-The tool used was OpenAI Codex through the desktop application. Exact model versions for earlier sessions and reliable percentages of manual versus assisted work were not recorded. Assistance included the Pinia/API integration, search and favorites, routing fixes, English interface, fallback image, tests and this documentation. The implementation was adapted to the actual Greek API, including its pagination and numeric IDs. Personal learning claims and authorship percentages must be supplied honestly by the student, rather than inferred from passing tests.
+### Assistance and adaptation
 
-## Limits and possible improvements
+| Area | Assistance provided and project-specific adaptation |
+| --- | --- |
+| API and store | Pagination, numeric IDs, actual Greek fields and Pinia initialization. |
+| Search and favorites | Chained computed values, ID persistence and handling of unavailable storage. |
+| Components and routing | Reusable cards, explicit props/emits, hash routes and independent heart clicks. |
+| UI and accessibility | English text, image fallback, theme contrast and visible keyboard focus. |
+| Validation and documentation | Logic checks, browser scenarios, screenshots and comparison against the supplied brief. |
 
-- Favorites are local to one browser and site address; there is no account synchronization.
-- The catalog follows the API's terminology and includes a few Roman deities. This is disclosed on the About page.
-- A missing portrait uses the default illustration. The application does not supply an invented portrait for each deity.
-- A future iteration could preserve search settings when returning from a profile, add a documented offline cache, or improve long-card text layouts.
-- Forms and authentication belong to later course sequences and are intentionally outside this delivery.
+The project started from an existing student repository. Its earlier manual contributions cannot be reliably separated from assistance by counting lines or commits. The student's own contribution and learning account is still required.
 
-## Personal reflection
+Passing tests does not prove that the student understands the implementation. The assessment requires that understanding, including the ability to explain and modify the code during the oral defense.
 
-The technical audit is complete for the documented scope. Before an oral assessment, the student still needs to explain the code and write their own account of difficulties, learning and independent contributions if requested by the teacher. Those personal statements cannot be established by an automated audit.
+## 6. Personal review
+
+### Student reflection — awaiting personal input
+
+This part must be written from the student's experience. It has not been invented by the assistant. The student needs to record:
+
+- Why Greek mythology was chosen.
+- What they implemented or understood independently.
+- The concepts they learned and those still needing practice.
+- The difficulties encountered, help received and solutions they can explain.
+- What they are proud of and what they would improve.
+
+### Technical difficulties recorded in the project
+
+The work addressed API pagination, publishing under a GitHub Pages subpath, invalid routes, favorite persistence, clicks on a heart inside a linked card, failed portraits and insufficient color contrast. These are observed project issues; they are not claims of personal mastery.
+
+### Current limits and possible improvements
+
+- Favorites belong to one browser and site address. They do not synchronize across devices.
+- API availability and portrait content are external dependencies. The default image covers absent or broken portraits.
+- The API includes a few Roman deities and provides its own categories. The About page explains this.
+- For a much larger catalog, visual pagination or load-more controls could limit rendered cards. The current catalog contains 51 entries.
+- Search state could be retained when returning from a profile. An offline cache could be added later if needed.
+- Forms and authentication belong to later course sequences and are outside the requested scope.
+
+## 7. References and sources
+
+- [Actual individual assessment brief, 2026–2027](https://tirtho.notion.site/Projet-individuel-valuatif-Application-Vue-3-Vuetify-avec-API-268e74c07f7c80e5822adb530f7a6027).
+- [DEV JS Pokédex exercises, steps 1–17](https://devjs.ch/exercices/pokedex-vuetify/e1.html).
+- [DIVTEC Greek API endpoint](https://apis.divtec.me/api/greek/gods), source of descriptions, relationships and portraits.
+- [Vue documentation](https://vuejs.org/guide/introduction.html), [Vuetify components](https://vuetifyjs.com/en/components/all/), [Pinia](https://pinia.vuejs.org/), [Vue Router](https://router.vuejs.org/) and [Axios](https://axios-http.com/).
+- W3C guidance: [text contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html), [control contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html), [visible focus](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html).
+- AI assistance is described in section 5.

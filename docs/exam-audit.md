@@ -1,5 +1,7 @@
 # Sequence 1–5 audit
 
+> Historical baseline at commit `3bf6040`, before the actual Notion assessment brief was supplied. This report validates the exercises only. The [assessment audit](assessment-audit.md) supersedes any conclusion about the complete exam requirements, particularly accessibility, props/emits and personal documentation.
+
 Date: 3 November 2026. Scope: the current DEV JS exercise, steps **1–17**, adapted to the Greek Gods project. The complete articles, tasks, tests and personal-project checklists were read. Later sequences are excluded at the student's request.
 
 Result: no missing functional criterion was found in this scope. One ESLint formatting error in `AppHeader.vue` was corrected. The README was completed with screenshots, purpose, actual API endpoints, data flow, limitations and an honest assistance statement.
