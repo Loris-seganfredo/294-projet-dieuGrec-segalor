@@ -38,7 +38,7 @@ This assessment is broader than the exercise checklists. The earlier [sequence 1
 | Clean repository and meaningful commits | Existing history preserved; corrections committed by purpose | Verified |
 | Public deployment and installation instructions | Vercel/Pages, clone/install/run, `.env.example` and build commands | Verified separately from code |
 | Seven-section README, screenshots, references, AI declaration | Technical sections completed and screenshots updated | Present |
-| Personal learning path, contributions and reflection | Factual Git chronology and assistance are documented; the student's own account is not supplied | Student input required |
+| Personal learning path, contributions and reflection | Factual Git chronology, assistance and the student's reason for choosing the subject are documented; learning and contributions remain to be described | Further student input required |
 | Weekly teacher meetings | Required by the brief; cannot be proven by the repository | Student confirmation required |
 | Oral defense and possible live modification | Topics and a demo sequence are listed below | Must be demonstrated by the student |
 
@@ -72,7 +72,9 @@ Sources: [W3C text contrast](https://www.w3.org/WAI/WCAG22/Understanding/contras
 
 ## Personal work still required
 
-The README cannot truthfully be marked fully complete until the student supplies their own learning account and contribution details. No invented authorship percentages or claims of personal understanding have been inserted. The brief permits declared AI help but requires understanding and adaptation of the code.
+On 4 November 2026, the student explained that their preferred themes were no longer available and Greek gods was the last available subject that interested them. This explanation has been added to the README.
+
+The README still needs the student's own learning account and contribution details. No invented authorship percentages or claims of personal understanding have been inserted. The brief permits declared AI help but requires understanding and adaptation of the code.
 
 The stated submission deadline is **Tuesday 10 November 2026 at 23:59**, for code and documentation. Weekly teacher follow-ups and the oral defense are personal obligations, not features the application can implement.
 

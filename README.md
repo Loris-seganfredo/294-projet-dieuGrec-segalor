@@ -10,7 +10,7 @@ This Vue 3 and Vuetify project follows the [individual assessment brief](https:/
 
 Greek Gods is a reference catalog for students and visitors discovering mythology. Visitors can find a deity, read its profile and save a personal selection. The public DIVTEC API provides names, categories, descriptions, portraits and relationships without an API key.
 
-The project adapts the course's Pokémon examples to Greek mythology. The student's personal reason for choosing this subject still needs to be recorded in section 6.
+The project adapts the course's Pokémon examples to Greek mythology. The reason for choosing this subject is explained in section 6.
 
 ### Main features
 
@@ -177,11 +177,14 @@ Passing tests does not prove that the student understands the implementation. Th
 
 ## 6. Personal review
 
-### Student reflection — awaiting personal input
+### Why I chose this subject
 
-This part must be written from the student's experience. It has not been invented by the assistant. The student needs to record:
+I initially wanted to work on other themes, but they were no longer available. I chose Greek gods because it was the last available theme that interested me.
 
-- Why Greek mythology was chosen.
+### Learning and contributions — awaiting personal input
+
+The student's own account is still needed for:
+
 - What they implemented or understood independently.
 - The concepts they learned and those still needing practice.
 - The difficulties encountered, help received and solutions they can explain.
