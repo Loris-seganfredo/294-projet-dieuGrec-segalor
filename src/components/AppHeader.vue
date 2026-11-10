@@ -1,11 +1,9 @@
 <template>
-  <!-- Barre du haut qui apparaît sur toutes les pages. -->
+  <!-- Barre de navigation commune. Sur les petits écrans, le titre se cache pour laisser la place aux liens. -->
   <v-app-bar>
-    <!-- Le titre disparaît sur les plus petits écrans pour laisser de la place aux trois boutons. -->
     <v-app-bar-title class="d-none d-sm-block">Greek Gods</v-app-bar-title>
-    <!-- Regrouper les liens dans une zone de navigation nommée pour les lecteurs d’écran. -->
     <nav aria-label="Main navigation" class="d-flex align-center px-1">
-      <!-- Le bouton Home ouvre l’adresse /. exact le montre comme actif seulement quand on est à l’accueil. -->
+      <!-- exact rend le bouton Home actif seulement sur la page d’accueil. -->
       <v-btn
         class="px-2"
         exact
@@ -13,20 +11,19 @@
         size="small"
         to="/"
       >Home</v-btn>
-      <!-- Le bouton Favorites ouvre la page des favoris. Son compteur se met à jour à chaque ajout ou retrait. -->
+      <!-- Le bouton Favorites ouvre la liste et montre le compteur lu dans le store. -->
       <v-btn class="px-2" prepend-icon="mdi-heart" size="small" to="/favorites">
         Favorites ({{ godStore.totalFavorites }})
       </v-btn>
-      <!-- Le bouton About ouvre la page qui présente le projet. -->
+      <!-- Le lien About ouvre la présentation du projet. -->
       <v-btn class="px-2" prepend-icon="mdi-information-outline" size="small" to="/about">About</v-btn>
     </nav>
   </v-app-bar>
 </template>
 
 <script setup>
-  // Importer l’accès au store, qui est la mémoire commune du catalogue et des favoris.
   import { useGodStore } from '@/stores/godStore'
 
-  // Lire le nombre de favoris directement dans ce store.
+  // Lire le nombre de favoris dans la mémoire commune du site.
   const godStore = useGodStore()
 </script>

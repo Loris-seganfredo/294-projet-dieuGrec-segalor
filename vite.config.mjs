@@ -1,84 +1,63 @@
-// Ces outils de Node.js servent à retrouver le dossier src à partir de l’adresse de ce fichier.
 import { fileURLToPath, URL } from 'node:url'
-// Ce module permet à Vite de lire les fichiers .vue.
 import Vue from '@vitejs/plugin-vue'
-// Ce module rend certaines fonctions disponibles sans écrire leur import à chaque fois.
 import AutoImport from 'unplugin-auto-import/vite'
-// Ce module charge la police du site.
 import Fonts from 'unplugin-fonts/vite'
-// Ce module retrouve certains composants automatiquement par leur nom.
 import Components from 'unplugin-vue-components/vite'
-// Cette liste indique quelles fonctions du routeur peuvent être importées automatiquement.
 import { VueRouterAutoImports } from 'unplugin-vue-router'
-// Ce module crée les adresses du site d’après les noms des fichiers dans src/pages.
 import VueRouter from 'unplugin-vue-router/vite'
-// defineConfig aide à écrire les réglages attendus par Vite.
 import { defineConfig } from 'vite'
 
-// Ce module ajoute la structure commune autour des pages.
 import Layouts from 'vite-plugin-vue-layouts-next'
-// Ce module relie Vuetify à Vite et prépare les chemins vers les images et autres fichiers.
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
-// Vite prépare et lance le site en local. Il prépare aussi les fichiers pour le publier.
-// Documentation de Vite : https://vitejs.dev/config/
+// Vite prépare les fichiers du projet pour le développement et la publication.
 export default defineConfig({
-  // L’adresse de base est / en local. Sur GitHub Pages, elle contient le nom du dépôt.
+  // Sur GitHub Pages, le site est dans un dossier au nom du dépôt. Cette adresse aide à retrouver les fichiers.
   base: process.env.VITE_BASE_URL ?? '/',
-  // Activer les outils supplémentaires dont Vite a besoin pour préparer ce projet.
   plugins: [
-    // Lire les fichiers de src/pages pour créer les adresses du site.
+    // Créer les routes depuis src/pages et leurs structures communes depuis src/layouts.
     VueRouter(),
-    // Lire src/layouts pour trouver la structure à mettre autour des pages.
     Layouts(),
-    // Transformer les fichiers .vue en code lisible par le navigateur.
+    // Transformer les fichiers .vue et préparer les chemins des ressources utilisées dans les composants.
     Vue({
-      // Vite peut aussi retrouver les images indiquées dans les balises Vuetify.
       template: { transformAssetUrls },
     }),
-    // Brancher Vuetify pour utiliser ses composants et ses styles.
+    // Charger les composants Vuetify utilisés et lire le fichier de réglages Sass du projet.
     Vuetify({
-      // Retrouver automatiquement les composants Vuetify utilisés, par exemple v-btn.
       autoImport: true,
       styles: {
-        // Lire ce fichier si le projet veut personnaliser des réglages Sass de Vuetify.
         configFile: 'src/styles/settings.scss',
       },
     }),
-    // Retrouver les composants du projet comme AppHeader quand leur nom est utilisé dans une page.
+    // Retrouver les composants du projet par leur nom, comme AppHeader.
     Components(),
-    // Configurer le chargement de la police du texte.
+    // Charger Roboto avec plusieurs épaisseurs, du texte fin au texte gras.
     Fonts({
       google: {
         families: [{
-          // Utiliser la police Roboto fournie par Google Fonts.
           name: 'Roboto',
-          // Charger plusieurs épaisseurs de texte, du plus fin au plus gras.
           styles: 'wght@100;300;400;500;700;900',
         }],
       },
     }),
-    // Choisir les fonctions que Vite peut importer automatiquement.
+    // Rendre certaines fonctions de Vue, du routeur et de Pinia disponibles sans répéter les imports.
     AutoImport({
       imports: [
-        // Autoriser les fonctions de Vue, comme ref et computed.
         'vue',
-        // Autoriser les fonctions de navigation de Vue Router.
         VueRouterAutoImports,
         {
-          // Autoriser ces deux fonctions qui servent à créer et lire le store Pinia.
           pinia: ['defineStore', 'storeToRefs'],
         },
       ],
-      // Générer une liste que le vérificateur ESLint peut utiliser pour reconnaître ces noms.
+      // Donner à ESLint la liste des noms ajoutés automatiquement.
       eslintrc: {
         enabled: true,
       },
-      // Permettre aussi ces imports dans la partie qui décrit l’affichage des fichiers Vue.
+      // Autoriser aussi ces fonctions dans le modèle d’affichage des fichiers Vue.
       vueTemplate: true,
     }),
   ],
-  // Exclure ces modules de la préparation à l’avance des dépendances en mode développement.
+  // Laisser ces modules en dehors de la préparation à l’avance des dépendances en développement.
   optimizeDeps: {
     exclude: [
       'vuetify',
@@ -88,14 +67,13 @@ export default defineConfig({
       'unplugin-vue-router/data-loaders/basic',
     ],
   },
-  // Remplacer process.env par un objet vide dans le code destiné au navigateur.
+  // Prévoir un objet vide pour process.env dans le code destiné au navigateur.
   define: { 'process.env': {} },
   resolve: {
-    // Le raccourci @ pointe vers src. Il évite de remonter les dossiers avec plusieurs ../.
+    // Le raccourci @ pointe vers src. Vite peut aussi essayer les extensions listées plus bas.
     alias: {
       '@': fileURLToPath(new URL('src', import.meta.url)),
     },
-    // Permettre à Vite de chercher ces types de fichiers si l’import ne donne pas d’extension.
     extensions: [
       '.js',
       '.json',
@@ -106,18 +84,16 @@ export default defineConfig({
       '.vue',
     ],
   },
-  // En développement, ouvrir le site sur le port 3000 de l’ordinateur.
+  // Utiliser le port 3000 pour ouvrir le site en local.
   server: {
     port: 3000,
   },
-  // Choisir le compilateur qui transforme les styles Sass et SCSS en CSS pour le navigateur.
+  // Transformer les feuilles Sass et SCSS en CSS avec le compilateur moderne.
   css: {
     preprocessorOptions: {
-      // Utiliser le compilateur moderne pour les fichiers Sass.
       sass: {
         api: 'modern-compiler',
       },
-      // Utiliser le même compilateur pour les fichiers SCSS.
       scss: {
         api: 'modern-compiler',
       },

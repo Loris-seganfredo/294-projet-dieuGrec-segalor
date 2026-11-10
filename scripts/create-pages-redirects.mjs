@@ -1,11 +1,8 @@
-// Importer les outils de Node.js pour créer des dossiers et écrire des fichiers.
 import { mkdir, writeFile } from 'node:fs/promises'
 
-// Ce script garde les anciens liens utilisables après le passage aux adresses avec #.
-// Sur GitHub Pages, base contient le nom du dépôt. En local, le site part de la racine /.
+// Ce script garde les anciens liens utilisables. base indique le dossier du site sur GitHub Pages.
 const base = process.env.VITE_BASE_URL || '/'
-// Le texte entre les accents graves est le fichier HTML qui sera écrit dans dist.
-// Les valeurs entre dollar et accolades sont insérées au moment de créer le fichier.
+// Modèle de la page de redirection. Les valeurs entre dollar et accolades sont insérées dans le fichier.
 const html = `<!doctype html>
 <html lang="en">
   <head>
@@ -14,31 +11,27 @@ const html = `<!doctype html>
     <title>Greek Gods — Redirecting</title>
   </head>
   <body>
-    <!-- Si la redirection tarde ou que JavaScript est coupé, ce lien permet d’aller à l’accueil. -->
+    <!-- Laisser un lien vers l’accueil si le navigateur ne lance pas la redirection. -->
     <p>Opening Greek Gods… <a href="${base}">Go to the home page</a></p>
     <script>
-      // Insérer l’adresse de base comme une chaîne de texte JavaScript.
       const base = ${JSON.stringify(base)};
-      // Enlever le dossier du dépôt pour garder seulement le chemin de la page. Sinon, viser l’accueil.
+      // Retirer le dossier du dépôt pour obtenir le chemin à placer après #.
       let route = location.pathname.startsWith(base)
         ? location.pathname.slice(base.length - 1)
         : '/';
-      // Reconnaître l’ancienne adresse française et utiliser l’adresse anglaise des favoris.
+      // Transformer l’ancienne adresse française des favoris en adresse anglaise.
       if (/^\\/favoris\\/?$/.test(route)) route = '/favorites';
-      // Mettre le chemin après # et garder le texte de recherche et l’ancienne ancre.
-      // replace remplace l’adresse dans l’historique pour éviter de revenir à la redirection avec le bouton retour.
+      // Ouvrir la nouvelle adresse en gardant les paramètres et l’ancre, sans ajouter la redirection à l’historique.
       location.replace(base + '#' + route + location.search + location.hash);
     </script>
   </body>
 </html>
 `
 
-// GitHub Pages sert 404.html quand aucun fichier ne correspond à une ancienne adresse.
+// Créer une page générale pour les anciennes adresses inconnues.
 await writeFile('dist/404.html', html)
-// Créer aussi une page de redirection pour chacun de ces anciens liens directs.
+// Créer aussi une page pour chacune des anciennes adresses les plus courantes.
 for (const route of ['favoris', 'favorites', 'about']) {
-  // Créer le dossier s’il manque. recursive permet de créer ses dossiers parents si nécessaire.
   await mkdir(`dist/${route}`, { recursive: true })
-  // Un fichier index.html dans le dossier est servi quand on ouvre directement cette adresse.
   await writeFile(`dist/${route}/index.html`, html)
 }

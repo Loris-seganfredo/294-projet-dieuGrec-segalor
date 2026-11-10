@@ -1,30 +1,27 @@
 <template>
-  <!-- Page qui montre uniquement les divinités enregistrées avec le cœur. -->
   <v-container class="py-8">
-    <!-- Le nombre dans le titre se met à jour quand un favori est ajouté ou retiré. -->
+    <!-- Le titre affiche le nombre de favoris. Il change à chaque ajout ou retrait. -->
     <h1 class="text-h3 text-center mb-8">
       My favorites ({{ godStore.totalFavorites }})
     </h1>
 
-    <!-- Le navigateur ne garde que les numéros des favoris. Attendre les fiches complètes avant de les afficher. -->
-    <!-- La barre bouge pendant le chargement. Elle ne donne pas de pourcentage. -->
+    <!-- Le navigateur garde les numéros des favoris. Attendre le catalogue pour retrouver leurs fiches. -->
     <v-progress-linear
       v-if="godStore.isLoading || (!godStore.error && !godStore.hasLoaded)"
       aria-label="Loading favorites"
       color="primary"
       indeterminate
     />
-    <!-- Si le catalogue ne peut pas être chargé, montrer le message d’erreur. -->
+    <!-- Si le catalogue ne charge pas, afficher l’erreur et proposer de réessayer. -->
     <v-alert v-else-if="godStore.error" class="mb-6" type="error" variant="tonal">
       <div class="d-flex align-center justify-space-between flex-wrap ga-3">
         <span>{{ godStore.error }}</span>
-        <!-- Ce bouton réessaie de charger le catalogue en appelant la même fonction qu’au démarrage. -->
         <v-btn :loading="godStore.isLoading" variant="text" @click="godStore.init()">
           Try again
         </v-btn>
       </div>
     </v-alert>
-    <!-- Si le catalogue est chargé et que la liste des favoris est vide, expliquer comment en ajouter un. -->
+    <!-- Si la liste est vide, expliquer qu’un clic sur un cœur ajoute un favori. -->
     <v-alert
       v-else-if="godStore.totalFavorites === 0"
       class="mb-6"
@@ -34,10 +31,8 @@
       You have no favorites yet.
       Click the heart on a god to add your first favorite!
     </v-alert>
-    <!-- S’il reste des favoris, les afficher en grille. -->
+    <!-- Quand des favoris existent, afficher une colonne par fiche. La grille s’adapte à la largeur de l’écran. -->
     <v-row v-else>
-      <!-- v-for crée une colonne par favori. Le numéro de la fiche permet à Vue de reconnaître chaque carte. -->
-      <!-- Le nombre de cartes par ligne augmente quand l’écran s’élargit. -->
       <v-col
         v-for="god in godStore.getFavorites"
         :key="god.id"
@@ -46,8 +41,7 @@
         md="4"
         sm="6"
       >
-        <!-- Passer à la carte les données de la fiche et l’état de son cœur. -->
-        <!-- Le clic sur le cœur est renvoyé à cette page, qui appelle la fonction commune de retrait ou d’ajout. -->
+        <!-- Réutiliser la carte de l’accueil. Son cœur déclenche ici la même action d’ajout ou de retrait. -->
         <GodCard
           :god="god"
           :is-favorite="godStore.isFavorite(god)"
@@ -59,17 +53,13 @@
 </template>
 
 <script setup>
-  // Réutiliser la même carte que sur la page d’accueil.
   import GodCard from '@/components/GodCard.vue'
-  // Importer l’action du cœur et son message de confirmation.
   import { useFavoriteFeedback } from '@/composables/favoriteFeedback'
-  // Les fiches et les favoris sont rangés dans le store, la mémoire commune du site.
   import { useGodStore } from '@/stores/godStore'
 
-  // Utiliser le même store que sur la page d’accueil.
+  // Lire les favoris dans le store et utiliser l’action commune du cœur.
   const godStore = useGodStore()
-  // Récupérer la fonction appelée lorsqu’on clique sur un cœur.
   const { toggleFavorite } = useFavoriteFeedback()
-  // /favoris est une deuxième adresse pour cette page. Les anciens liens fonctionnent toujours.
+  // L’ancienne adresse /favoris ouvre la même page que /favorites.
   definePage({ alias: '/favoris' })
 </script>

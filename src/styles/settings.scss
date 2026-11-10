@@ -1,8 +1,6 @@
-// Ce fichier permettrait de modifier les réglages de style de Vuetify avant la compilation.
-// L’exemple ci-dessous est en commentaire. Les couleurs utilisées par le site sont définies dans src/plugins/vuetify.js.
 
-// Exemples des réglages disponibles : https://vuetifyjs.com/features/sass-variables/
-// Si on activait ces trois lignes, Vuetify n’ajouterait pas ses classes de couleur prêtes à l’emploi.
+// Exemple désactivé. Ces lignes permettraient de modifier les classes de couleur fournies par Vuetify.
+// Les couleurs des thèmes utilisés par le site sont dans src/plugins/vuetify.js.
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );

@@ -1,22 +1,20 @@
-# Fichier créé par macOS pour mémoriser l’affichage des dossiers.
+# Ignorer les fichiers de l’ordinateur, les bibliothèques installées et le résultat de la compilation.
 .DS_Store
-# Les bibliothèques sont installées par npm sur chaque ordinateur.
 node_modules
-# Vite recrée le site compilé à chaque construction. Git ne suit pas ce dossier.
 /dist
 
-# Réglages locaux propres à chaque ordinateur. Le fichier .env.example sert de modèle partagé.
+# Garder les réglages locaux propres à chaque ordinateur.
 .env
 .env.local
 .env.*.local
 
-# Fichiers de diagnostic créés par les outils d’installation des bibliothèques.
+# Ignorer les journaux créés par les outils d’installation.
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Réglages et fichiers temporaires créés par les éditeurs de code.
+# Ignorer les réglages et fichiers temporaires des éditeurs de code.
 .idea
 .vscode
 *.suo

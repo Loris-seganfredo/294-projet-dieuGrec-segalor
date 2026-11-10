@@ -1,36 +1,26 @@
-// ref crée une valeur surveillée par Vue. nextTick permet d’attendre la prochaine mise à jour de l’écran.
 import { nextTick, ref } from 'vue'
-// Le store connaît les favoris et sait les modifier.
 import { useGodStore } from '@/stores/godStore'
 
-// Ces deux valeurs sont partagées par toutes les pages. Le petit message reste visible même si une carte disparaît.
-// Au départ, le message est caché.
+// La visibilité et le texte du message sont partagés. La confirmation reste affichée si une carte disparaît.
 const showSnackbar = ref(false)
-// Ce texte sera rempli après un clic sur un cœur.
 const snackbarMessage = ref('')
 
-// Les pages appellent cette fonction pour utiliser le même message et la même action.
+// Les pages utilisent cette fonction pour retrouver la même action de favori et le même message.
 export function useFavoriteFeedback () {
-  // Ouvrir la mémoire commune des divinités et des favoris.
   const godStore = useGodStore()
 
-  // Cette fonction change le favori, puis affiche un petit message de confirmation.
   async function toggleFavorite (god) {
-    // Vérifier si la divinité était déjà dans les favoris avant de les modifier.
+    // Vérifier l’état du cœur avant de changer les favoris pour savoir quel message afficher.
     const wasFavorite = godStore.isFavorite(god)
-    // Demander au store d’ajouter ou de retirer cette divinité.
     godStore.toggleFavorite(god)
 
-    // Fermer le message s’il est déjà affiché. Cela permet de relancer son temps d’affichage à chaque clic.
+    // Fermer l’ancien message, puis préparer le texte de confirmation pour l’ajout ou le retrait.
     showSnackbar.value = false
-    // Choisir le message de retrait si la fiche était en favori, ou le message d’ajout sinon.
     snackbarMessage.value = wasFavorite ? 'Removed from favorites' : 'Added to favorites'
-    // Attendre que Vue applique la fermeture du message.
+    // Attendre que Vue ferme le message avant de le rouvrir. Cela relance son délai d’affichage.
     await nextTick()
-    // Afficher le nouveau message.
     showSnackbar.value = true
   }
 
-  // Donner aux pages l’accès au texte, à l’état ouvert ou fermé et à la fonction appelée au clic.
   return { showSnackbar, snackbarMessage, toggleFavorite }
 }

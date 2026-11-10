@@ -1,9 +1,8 @@
 <template>
-  <!-- Ce fichier donne la structure commune du site. La barre de navigation vient en premier. -->
+  <!-- Garder la même navigation en haut de chaque page. -->
   <AppHeader />
-  <!-- Cette zone contient ce qui change d’une page à l’autre. -->
   <v-main>
-    <!-- Montrer l’avertissement uniquement si la lecture ou la sauvegarde des favoris a échoué. -->
+    <!-- Afficher un avertissement si le navigateur n’arrive pas à lire ou sauvegarder les favoris. -->
     <v-alert
       v-if="godStore.favoritesError"
       class="ma-4"
@@ -12,27 +11,23 @@
     >
       {{ godStore.favoritesError }}
     </v-alert>
-    <!-- Vue Router place ici l’accueil, les favoris, une fiche ou une autre page selon l’adresse. -->
+    <!-- Vue Router place ici le contenu de la page choisie par l’adresse. -->
     <router-view />
   </v-main>
 
-  <!-- Le texte entre les deux balises remplit le slot du pied de page sur toutes les pages. -->
+  <!-- Fournir au pied de page le texte affiché sur toutes les pages. -->
   <AppFooter>Greek Gods</AppFooter>
-  <!-- Afficher le petit message d’ajout ou de retrait pendant 2 secondes. -->
-  <!-- Il reste dans cette structure commune même quand la dernière carte de la page des favoris disparaît. -->
+  <!-- Afficher la confirmation pendant deux secondes, même si la carte de la dernière fiche favorite disparaît. -->
   <v-snackbar v-model="showSnackbar" color="primary" :timeout="2000">
     {{ snackbarMessage }}
   </v-snackbar>
 </template>
 
 <script setup>
-  // Accéder au texte et à l’état du message que les pages peuvent déclencher.
   import { useFavoriteFeedback } from '@/composables/favoriteFeedback'
-  // Accéder au store pour lire les erreurs liées aux favoris.
   import { useGodStore } from '@/stores/godStore'
 
-  // Ouvrir le même store que celui utilisé dans les pages.
+  // Lire l’erreur des favoris et récupérer le texte et l’état du message partagé par les pages.
   const godStore = useGodStore()
-  // v-model utilise showSnackbar pour ouvrir ou fermer le message. snackbarMessage donne le texte à afficher.
   const { showSnackbar, snackbarMessage } = useFavoriteFeedback()
 </script>

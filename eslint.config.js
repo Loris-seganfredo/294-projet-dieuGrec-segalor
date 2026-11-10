@@ -1,5 +1,4 @@
-// Charger les règles de vérification conseillées pour les projets Vuetify.
 import vuetify from 'eslint-config-vuetify'
 
-// ESLint lit le code pour repérer des erreurs et des différences de style. Il utilise ici les règles de Vuetify.
+// Utiliser les règles de Vuetify pour repérer des erreurs et garder un style de code cohérent.
 export default vuetify()

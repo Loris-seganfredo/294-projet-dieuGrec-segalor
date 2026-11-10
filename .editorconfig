@@ -1,10 +1,8 @@
-# Ces règles aident l’éditeur à mettre en forme les fichiers JavaScript, TypeScript et Vue.
+# Règles d’écriture pour les fichiers JavaScript, TypeScript et Vue.
 [*.{js,jsx,ts,tsx,vue}]
-# Utiliser des espaces pour décaler le code vers la droite.
+# Décaler le code avec deux espaces par niveau.
 indent_style = space
-# Ajouter deux espaces par niveau.
 indent_size = 2
-# Enlever les espaces inutiles en fin de ligne à l’enregistrement.
+# Nettoyer les espaces en fin de ligne et terminer le fichier par un retour à la ligne.
 trim_trailing_whitespace = true
-# Mettre un retour à la ligne à la fin du fichier.
 insert_final_newline = true
