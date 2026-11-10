@@ -32,11 +32,11 @@ Le projet transpose les exemples Pokémon du cours à la mythologie grecque. Le 
 
 ### Ressources utilisées
 
-La principale ressource est l’[exercice Pokédex de DEV JS](https://devjs.ch/exercices/pokedex-vuetify/e1.html), adapté à l’API des dieux grecs. Les documentations officielles de Vue, Vuetify, Pinia, Vue Router et Axios servent également de références. Les liens figurent dans la partie 7.
+Je suis parti de l’[exercice Pokédex de DEV JS](https://devjs.ch/exercices/pokedex-vuetify/e1.html) pour construire un catalogue sur les dieux grecs. Les étapes du cours donnent des exemples de liste, de fiches et de favoris. Dans mon projet, les catégories et les informations des fiches viennent de l’API DIVTEC. Les liens vers les documentations de Vue, Vuetify, Pinia, Vue Router et Axios sont dans la partie 7.
 
 ### Progression enregistrée
 
-Les dates ci-dessous proviennent de l’historique Git. Elles montrent l’avancement du projet. Elles ne prouvent pas à elles seules les apprentissages personnels ni la participation aux rendez-vous hebdomadaires.
+Le tableau résume les étapes du projet à partir de l’historique Git.
 
 | Date | Travail enregistré |
 | --- | --- |
@@ -45,13 +45,15 @@ Les dates ci-dessous proviennent de l’historique Git. Elles montrent l’avanc
 | 26 octobre | Configuration d’Axios, variables d’environnement, indicateurs de chargement et gestion des erreurs. |
 | 2 novembre | Recherche, filtre par catégorie, tri alphabétique et favoris persistants. |
 | 3 novembre | Interface en anglais, corrections des routes, images par défaut, vérification des exercices puis comparaison avec les consignes de l’examen. Amélioration des props/emits, séparation du service API, correction des contrastes et du focus clavier. |
+| 10 novembre | Pied de page simplifié, commentaires en français regroupés par bloc et dernière vérification du site publié. |
 
-Le récit personnel des ressources étudiées, des notions difficiles et des progrès reste à compléter par l’élève. Les consignes demandent des rendez-vous hebdomadaires avec l’enseignant ; leur réalisation ne peut pas être vérifiée dans le dépôt.
+J’ai pris en main Vue avec ce projet. Le travail a avancé par étapes. D’abord afficher le catalogue et ouvrir une fiche, puis rechercher et trier les résultats, et enfin garder les favoris après avoir rechargé la page.
 
 ## 3. Outils et méthodologie
 
 ### Environnement de développement
 
+- WebStorm pour travailler sur le projet.
 - Vue 3, Vuetify 3, Pinia, Vue Router, Axios et Vite.
 - npm pour installer les dépendances et ESLint pour vérifier le code.
 - Git et GitHub pour l’historique des versions ; Vercel et GitHub Pages pour la publication.
@@ -87,6 +89,8 @@ La commande `npm run lint` applique également les corrections automatiques d’
 Le cœur utilise `@click.stop.prevent` : `.stop` empêche le clic de remonter à la carte et `.prevent` annule la navigation par défaut du lien. La fiche détaillée utilise la même fonction pour gérer les favoris. `GodImage` est réutilisé pour les portraits et les illustrations de remplacement. `AppFooter` reçoit son texte grâce à un slot.
 
 ### Choix de l’API et limites
+
+L’API DIVTEC convient au projet parce qu’elle donne assez d’informations pour construire le catalogue et les fiches. Les catégories servent au filtre. Les portraits, les descriptions, les pouvoirs et les liens de famille rendent chaque fiche différente. L’API est publique et ne demande pas de clé.
 
 | Ressource utilisée | Utilité |
 | --- | --- |
@@ -141,7 +145,7 @@ La compilation pour GitHub Pages utilise le chemin de base du dépôt. Les route
 
 ## 4. Tests et validation
 
-Le [rapport de vérification de l’examen](docs/assessment-audit.md) relie les critères aux vérifications effectuées et indique les éléments personnels encore à compléter. Le [premier rapport de vérification des exercices](docs/exam-audit.md) concerne uniquement les séquences 1 à 5.
+Le [rapport de vérification du 3 novembre](docs/assessment-audit.md) relie les critères de l’examen aux contrôles effectués à cette date. Le [premier rapport de vérification des exercices](docs/exam-audit.md) concerne uniquement les séquences 1 à 5.
 
 Les vérifications portent sur :
 
@@ -153,7 +157,9 @@ Les vérifications portent sur :
 - L’affichage sur mobile et ordinateur, les images manquantes, les identifiants invalides et les pages inconnues.
 - ESLint, la compilation de production, le déploiement et les pages publiques en fonctionnement.
 
-Le service API, le store et les confirmations des favoris ont aussi été vérifiés avec des scripts Node isolés utilisant le véritable code, Vue et Pinia, avec une API et un stockage simulés. Ces vérifications ont été réalisées avec l’aide de Codex. Elles ne sont pas présentées comme des tests écrits ou effectués personnellement par l’élève.
+Le service API, le store et les confirmations des favoris ont aussi été vérifiés avec des scripts Node isolés utilisant le véritable code, Vue et Pinia, avec une API et un stockage simulés. Ces vérifications ont été réalisées avec l’aide de Codex.
+
+Le 10 novembre 2026, Codex a aussi refait un essai sur le site publié. La recherche `ZEU` a trouvé Zeus. Le filtre *Goddess* a affiché le message sans résultat et le filtre *God* a retrouvé la fiche. Un favori ajouté est resté présent après rechargement, puis a pu être retiré. La fiche était accessible directement par son adresse. ESLint et la compilation Vite ont réussi.
 
 ## 5. Usage de l’intelligence artificielle
 
@@ -173,9 +179,12 @@ J’estime l’aide globale de l’IA à **80 %** pour la réalisation du projet
 | Interface et accessibilité | Textes de l’interface en anglais, image par défaut, contrastes des thèmes et focus clavier visible. |
 | Validation et documentation | Vérifications de logique, tests dans le navigateur, captures et comparaison avec les consignes fournies. |
 
-Le projet est parti d’un dépôt existant de l’élève. Le nombre de lignes ou de commits ne permet pas de distinguer précisément les contributions manuelles de l’aide reçue. Le récit personnel des contributions et des apprentissages reste à compléter.
+Deux exemples montrent comment l’IA a été utilisée dans le projet.
 
-La réussite des tests ne prouve pas la compréhension du code par l’élève. L’évaluation demande de pouvoir l’expliquer et le modifier pendant la défense orale.
+- **Charger le catalogue.** Codex a aidé à séparer les requêtes de l’API et le store. Le service charge les pages une par une et renvoie le catalogue complet. Le store garde ensuite les fiches à disposition des pages.
+- **Garder le cœur indépendant de la carte.** J’ai demandé de vérifier que cliquer sur le cœur n’ouvrait pas la fiche. Codex a aidé à vérifier ce comportement. Le cœur signale son clic à la page, qui ajoute ou retire le favori.
+
+Les contributions personnelles et les apprentissages sont détaillés dans la partie 6.
 
 ## 6. Bilan personnel
 
@@ -183,18 +192,19 @@ La réussite des tests ne prouve pas la compréhension du code par l’élève. 
 
 Au départ, je voulais travailler sur d’autres thèmes, mais ils n’étaient plus disponibles. J’ai choisi les dieux grecs parce que c’était le dernier thème disponible qui m’intéressait.
 
-### Apprentissages et contributions — à compléter
+### Mes choix et ma relecture
 
-Il reste à décrire personnellement :
+J’ai demandé un pied de page simple avec le nom du projet, puis une vérification de son affichage sur GitHub Pages. J’ai aussi relu les commentaires du code.
 
-- Ce que j’ai réalisé ou compris de manière autonome.
-- Les notions apprises et celles que je dois encore travailler.
-- Les difficultés rencontrées, l’aide reçue et les solutions que je peux expliquer.
-- Ce dont je suis fier et ce que je souhaite améliorer.
+### Ce que j’ai appris et ce dont je suis fier
 
-### Difficultés techniques constatées dans le projet
+Je suis fier d’avoir appris à utiliser Vue et surtout Vercel. Vue m’a permis de travailler sur une application composée de plusieurs pages, et Vercel m’a permis de voir mon projet en ligne.
 
-Le travail a porté sur la pagination de l’API, la publication dans un sous-dossier GitHub Pages, les routes invalides, la persistance des favoris, les clics sur un cœur placé dans une carte cliquable, les portraits indisponibles et les contrastes insuffisants. Il s’agit de problèmes constatés dans le projet ; leur résolution ne prouve pas à elle seule une maîtrise personnelle.
+### Difficultés et solutions
+
+Une difficulté du projet était de permettre l’ouverture d’une fiche directement sur GitHub Pages. Comme le site est publié dans un sous-dossier, le projet utilise des adresses avec `#`. Par exemple, `/#/gods/1` permet à Vue de retrouver la fiche de Zeus même si on recharge la page.
+
+Au moment de relire le code, j’ai trouvé la première version des commentaires trop courte et la suivante trop chargée. J’ai demandé quelques explications simples et en français pour chaque bloc important. C’est plus facile de suivre les étapes du code de cette façon.
 
 ### Limites actuelles et améliorations possibles
 
@@ -202,7 +212,7 @@ Le travail a porté sur la pagination de l’API, la publication dans un sous-do
 - La disponibilité de l’API et le contenu des portraits dépendent d’un service externe. L’image par défaut remplace les portraits absents ou impossibles à charger.
 - L’API contient quelques divinités romaines et fournit ses propres catégories. La page « À propos » le précise.
 - Pour un catalogue beaucoup plus grand, une pagination à l’écran ou un bouton pour charger davantage de résultats pourrait limiter le nombre de cartes affichées. Le catalogue vérifié contient 51 éléments.
-- Les critères de recherche pourraient être conservés au retour d’une fiche. Un cache hors ligne pourrait être ajouté par la suite si nécessaire.
+- La première amélioration serait de garder la recherche, le filtre et le tri en revenant d’une fiche. Cela éviterait de devoir retrouver les mêmes résultats.
 - Les formulaires et l’authentification appartiennent aux séquences suivantes et ne font pas partie du périmètre demandé.
 
 ## 7. Références et sources
