@@ -1,4 +1,7 @@
+<!-- Petite icône du site affichée dans l’onglet du navigateur. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Dessiner le carré bleu foncé avec des coins arrondis. -->
   <rect width="64" height="64" rx="14" fill="#172334"/>
+  <!-- Dessiner l’éclair jaune sur le fond. -->
   <path d="M37 7 15 35h16l-5 22 24-31H34z" fill="#ffc107"/>
 </svg>

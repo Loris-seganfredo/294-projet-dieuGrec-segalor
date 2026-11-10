@@ -1,4 +1,5 @@
+// Pinia est l’outil qui permet à plusieurs pages de partager les mêmes données.
 import { createPinia } from 'pinia'
 
-// Instance Pinia commune à tous les composants et stores de l’application.
+// Créer une seule mémoire Pinia. Elle sera installée dans l’application au démarrage.
 export default createPinia()

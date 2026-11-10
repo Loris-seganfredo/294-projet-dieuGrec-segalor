@@ -1,7 +1,12 @@
-// Animation partagée qui donne un effet de battement au cœur activé.
+// Cette animation fait grossir et rétrécir le cœur des favoris.
+// Les pourcentages indiquent à quel moment chaque changement arrive.
 @keyframes heartbeat {
+  // Commencer et terminer à la taille normale.
   0%, 100% { transform: scale(1); }
+  // Faire grossir le cœur une première fois.
   25% { transform: scale(1.5); }
+  // Le ramener près de sa taille normale.
   50% { transform: scale(1.1); }
+  // Le faire grossir encore plus pour le deuxième battement.
   75% { transform: scale(2); }
 }

@@ -1,17 +1,21 @@
-// Point d’entrée de Vue, chargé par index.html.
+// C’est le premier fichier JavaScript chargé par index.html. Il démarre le site.
+// createApp est la fonction de Vue qui crée une application.
 import { createApp } from 'vue'
 
+// Importer la fonction qui installe les outils du site : Vuetify, le routeur et Pinia.
 import { registerPlugins } from '@/plugins'
 
+// App.vue est le composant qui contient toute l’application.
 import App from './App.vue'
 
-// Feuille générée par Vite pour charger la police Roboto.
+// Charger la feuille de style créée par Vite pour la police Roboto.
 import 'unfonts.css'
 
+// Créer l’application en prenant App.vue comme point de départ.
 const app = createApp(App)
 
-// Installer les plugins avant le montage pour que les composants y aient accès.
+// Brancher les outils avant d’afficher les pages pour qu’elles puissent les utiliser.
 registerPlugins(app)
 
-// Afficher l’application dans le conteneur défini dans index.html.
+// Placer le site dans la balise qui porte id="app" dans index.html.
 app.mount('#app')

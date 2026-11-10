@@ -1,16 +1,23 @@
 <!DOCTYPE html>
+<!-- Le contenu visible du site est en anglais. lang aide le navigateur et les lecteurs d’écran. -->
 <html lang="en">
+  <!-- Cette partie donne les informations générales sur la page. -->
   <head>
+    <!-- UTF-8 permet d’afficher correctement les lettres accentuées et les symboles. -->
     <meta charset="UTF-8">
-    <!-- Vite remplace %BASE_URL% pour que le favicon soit trouvé sur GitHub Pages. -->
+    <!-- Choisir la petite icône de l’onglet. Vite adapte son adresse au dossier du site sur GitHub Pages. -->
     <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg">
+    <!-- Demander au navigateur d’adapter la largeur de la page à l’écran, y compris sur téléphone. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Donner un résumé du site aux moteurs de recherche. -->
     <meta name="description" content="Explore Greek gods, their stories and symbols, and save your favorites.">
+    <!-- Ce titre apparaît dans l’onglet du navigateur. -->
     <title>Greek Gods</title>
   </head>
   <body>
-    <!-- main.js monte l’application Vue dans ce conteneur. -->
+    <!-- Vue remplit cette balise vide avec le contenu du site. -->
     <div id="app"></div>
+    <!-- Démarrer l’application en chargeant main.js. type="module" permet d’utiliser les imports. -->
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

@@ -1,7 +1,8 @@
-// Point de configuration prévu pour les variables Sass de Vuetify.
-// L’exemple ci-dessous reste désactivé, les couleurs des thèmes sont définies dans plugins/vuetify.js.
+// Ce fichier permettrait de modifier les réglages de style de Vuetify avant la compilation.
+// L’exemple ci-dessous est en commentaire. Les couleurs utilisées par le site sont définies dans src/plugins/vuetify.js.
 
-// https://vuetifyjs.com/features/sass-variables/`
+// Exemples des réglages disponibles : https://vuetifyjs.com/features/sass-variables/
+// Si on activait ces trois lignes, Vuetify n’ajouterait pas ses classes de couleur prêtes à l’emploi.
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );

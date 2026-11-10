@@ -1,7 +1,10 @@
-// Rendre le focus clavier visible sur les boutons et les cartes dans les deux thèmes.
+// Avec la touche Tab, on peut passer d’un bouton ou d’une carte à l’autre.
+// focus-visible affiche le contour quand il aide à voir l’élément sélectionné, notamment au clavier.
 .v-btn:focus-visible,
 .v-card--link:focus-visible {
+  // Dessiner un contour de 3 pixels avec la couleur principale du thème actif.
   outline: 3px solid rgb(var(--v-theme-primary));
+  // Décaler le contour pour qu’il soit visible autour de l’élément.
   outline-offset: 3px;
 }
 

@@ -1,65 +1,86 @@
+# GitHub Actions construit le site et publie le résultat sur GitHub Pages.
 name: Deploy to GitHub Pages
 
 on:
+  # Lancer ces étapes automatiquement quand un commit est envoyé sur main.
   push:
     branches: [ main ]
+  # Permettre aussi de lancer la publication à la main depuis GitHub.
   workflow_dispatch:
 
+# Donner à cette exécution les droits dont elle a besoin.
 permissions:
+  # Lire le code du dépôt pour construire le site.
   contents: read
+  # Autoriser l’envoi du résultat vers GitHub Pages.
   pages: write
+  # Permettre à GitHub de vérifier l’identité de l’exécution qui publie.
   id-token: write
 
+# Utiliser le même groupe pour éviter de publier deux versions en même temps.
 concurrency:
   group: "pages"
+  # Laisser une publication déjà lancée aller jusqu’au bout.
   cancel-in-progress: false
 
 jobs:
+  # Première partie : préparer les fichiers du site sur une machine Linux de GitHub.
   build:
     runs-on: ubuntu-latest
     
     steps:
+      # Récupérer le code du commit à publier.
       - name: Checkout
         uses: actions/checkout@v4
         
+      # Installer la version de Node.js utilisée pour lancer npm.
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          # Réutiliser les téléchargements de npm pour gagner du temps.
           cache: 'npm'
           
+      # Installer les versions exactes des bibliothèques listées dans package-lock.json.
       - name: Install dependencies
         run: npm ci
         
-      # Préfixer les ressources avec le nom du dépôt pour GitHub Pages.
+      # Demander à Vite de construire le site dans dist.
+      # Le nom du dépôt dans VITE_BASE_URL aide le navigateur à trouver les images et les scripts au bon endroit.
       - name: Build project
         run: npm run build
         env:
           VITE_BASE_URL: /${{ github.event.repository.name }}/
         
+      # Créer les fichiers qui renvoient les anciennes adresses vers les nouvelles.
       - name: Keep existing page links working
         run: node scripts/create-pages-redirects.mjs
         env:
           VITE_BASE_URL: /${{ github.event.repository.name }}/
 
+      # Lire la configuration GitHub Pages du dépôt.
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
-      # Transmettre les fichiers construits au job deploy.
+      # Emballer les fichiers du dossier dist pour que la partie suivante puisse les publier.
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
+  # Deuxième partie : publier les fichiers préparés à l’étape build.
   deploy:
+    # Nommer l’environnement dans GitHub et afficher l’adresse finale du site.
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    # Publier après la construction et le transfert des fichiers.
+    # Attendre que la première partie ait terminé avec succès.
     needs: build
     
     steps:
+      # Envoyer le site préparé vers sa véritable adresse publique.
       - name: Deploy to GitHub Pages
+        # Ce nom permet de récupérer l’adresse produite par cette étape.
         id: deployment
         uses: actions/deploy-pages@v4

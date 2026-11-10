@@ -1,18 +1,28 @@
+<!-- Illustration affichée quand le portrait d’une divinité est absent ou ne se charge pas. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="560" viewBox="0 0 800 560" fill="none">
+  <!-- Préparer un dégradé de deux bleus pour le fond de l’image. -->
   <defs>
     <linearGradient id="sky" x2="800" y2="560" gradientUnits="userSpaceOnUse">
       <stop stop-color="#15283d"/>
       <stop offset="1" stop-color="#304a60"/>
     </linearGradient>
   </defs>
+  <!-- Remplir le fond avec le dégradé. -->
   <path fill="url(#sky)" d="M0 0h800v560H0z"/>
+  <!-- Tracer deux cercles dorés discrets derrière le temple. -->
   <circle cx="400" cy="255" r="170" fill="#efc878" opacity=".07"/>
   <circle cx="400" cy="255" r="132" stroke="#efc878" opacity=".18"/>
+  <!-- Regrouper les traits du temple pour leur donner la même couleur dorée. -->
   <g stroke="#efc878" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Tracer le toit triangulaire. -->
     <path d="m260 248 140-80 140 80H260Z" stroke-width="9"/>
+    <!-- Tracer les lignes horizontales du toit et du sol. -->
     <path d="M277 270h246M265 389h270M248 411h304" stroke-width="10"/>
+    <!-- Tracer les colonnes verticales. -->
     <path d="M292 280v94m40-94v94m48-94v94m40-94v94m48-94v94m40-94v94" stroke-width="12"/>
   </g>
+  <!-- Dessiner l’éclair au milieu du toit. -->
   <path d="m410 195-24 30h17l-10 27 29-34h-19l7-23Z" fill="#efc878"/>
+  <!-- Ajouter une ligne discrète sous le temple. -->
   <path d="M120 450h560" stroke="#efc878" opacity=".15"/>
 </svg>

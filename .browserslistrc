@@ -1,4 +1,8 @@
+# Prendre en compte les navigateurs dont la part d’utilisation dépasse 1 %.
 > 1%
+# Inclure aussi les deux versions les plus récentes des navigateurs.
 last 2 versions
+# Écarter les navigateurs qui ne sont plus maintenus.
 not dead
+# Écarter Internet Explorer 11.
 not ie 11
