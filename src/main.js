@@ -1,23 +1,17 @@
-/**
- * main.js
- *
- * Bootstraps Vuetify and other plugins then mounts the App`
- */
-
-// Composables
+// Point d’entrée de Vue, chargé par index.html.
 import { createApp } from 'vue'
 
-// Plugins
 import { registerPlugins } from '@/plugins'
 
-// Components
 import App from './App.vue'
 
-// Styles
+// Feuille générée par Vite pour charger la police Roboto.
 import 'unfonts.css'
 
 const app = createApp(App)
 
+// Installer les plugins avant le montage pour que les composants y aient accès.
 registerPlugins(app)
 
+// Afficher l’application dans le conteneur défini dans index.html.
 app.mount('#app')

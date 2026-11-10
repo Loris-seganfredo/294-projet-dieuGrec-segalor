@@ -4,6 +4,7 @@
       My favorites ({{ godStore.totalFavorites }})
     </h1>
 
+    <!-- Attendre le catalogue pour retrouver les fiches à partir des identifiants sauvegardés. -->
     <v-progress-linear
       v-if="godStore.isLoading || (!godStore.error && !godStore.hasLoaded)"
       aria-label="Loading favorites"
@@ -28,6 +29,7 @@
       Click the heart on a god to add your first favorite!
     </v-alert>
     <v-row v-else>
+      <!-- Réutiliser les cartes du catalogue et transmettre leur clic au gestionnaire commun. -->
       <v-col
         v-for="god in godStore.getFavorites"
         :key="god.id"
@@ -53,5 +55,6 @@
 
   const godStore = useGodStore()
   const { toggleFavorite } = useFavoriteFeedback()
+  // Garder les anciens liens en français compatibles avec cette page.
   definePage({ alias: '/favoris' })
 </script>

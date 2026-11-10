@@ -1,7 +1,8 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 
-// Keep bookmarks made before the switch to hash routing working on Pages.
+// Les pages générées redirigent les anciennes adresses GitHub Pages vers les routes après #.
 const base = process.env.VITE_BASE_URL || '/'
+// Le script dans la page retire le préfixe du dépôt et conserve la recherche et l’ancre de l’URL.
 const html = `<!doctype html>
 <html lang="en">
   <head>
@@ -23,6 +24,7 @@ const html = `<!doctype html>
 </html>
 `
 
+// Fournir une redirection générale et des pages dédiées pour les anciens liens les plus courants.
 await writeFile('dist/404.html', html)
 for (const route of ['favoris', 'favorites', 'about']) {
   await mkdir(`dist/${route}`, { recursive: true })

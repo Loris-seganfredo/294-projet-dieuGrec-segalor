@@ -22,6 +22,7 @@
       </v-chip>
     </header>
 
+    <!-- Les catégories affichées proviennent du catalogue chargé. -->
     <div
       v-if="categories.length > 0"
       class="d-flex justify-center flex-wrap ga-2 mb-6"
@@ -36,6 +37,7 @@
       </v-chip>
     </div>
 
+    <!-- v-model relie les champs à la recherche et à la catégorie sélectionnée. -->
     <v-row class="mb-4">
       <v-col cols="12" md="4" sm="6">
         <v-text-field
@@ -73,6 +75,7 @@
       </v-col>
     </v-row>
 
+    <!-- Afficher dans l’ordre le chargement, l’erreur, un état vide ou les résultats. -->
     <v-row
       v-if="isLoading || (!error && !hasLoaded)"
       aria-label="Loading gods"
@@ -130,6 +133,7 @@
     </v-alert>
 
     <v-row v-else>
+      <!-- La grille adapte le nombre de cartes par ligne à la largeur de l’écran. -->
       <v-col
         v-for="god in sortedGods"
         :key="god.id"
@@ -157,16 +161,20 @@
 
   const godStore = useGodStore()
   const { toggleFavorite } = useFavoriteFeedback()
+  // storeToRefs conserve la réactivité des valeurs extraites du store.
   const { gods, categories, totalGods, isLoading, hasLoaded, error } = storeToRefs(godStore)
+  // Ces choix appartiennent à la page. Ils contrôlent l’affichage du catalogue.
   const searchQuery = ref('')
   const selectedCategory = ref(null)
   const sortOrder = ref('asc')
 
+  // Première étape du filtrage : garder toutes les divinités si aucune catégorie n’est choisie.
   const filteredByCategory = computed(() => {
     if (!selectedCategory.value) return gods.value
     return gods.value.filter(god => god.category === selectedCategory.value)
   })
 
+  // Appliquer la recherche au résultat du filtre, par nom partiel et sans tenir compte de la casse.
   const filteredBySearch = computed(() => {
     if (!searchQuery.value) return filteredByCategory.value
     const query = searchQuery.value.trim().toLowerCase()
@@ -176,7 +184,7 @@
   })
 
   const sortedGods = computed(() => {
-    // Step 13 uses sort(): copy the array to preserve the store.
+    // sort() modifie le tableau sur place. Trier une copie préserve l’ordre du catalogue.
     // eslint-disable-next-line unicorn/no-array-sort
     return [...filteredBySearch.value].sort((a, b) => {
       const comparison = a.name.localeCompare(b.name, 'en')
@@ -184,6 +192,7 @@
     })
   })
 
+  // Changer le sens du tri recalcule sortedGods automatiquement.
   function toggleSort () {
     sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
   }

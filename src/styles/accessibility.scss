@@ -1,4 +1,4 @@
-// Keep keyboard focus clearly visible on both light and dark surfaces.
+// Rendre le focus clavier visible sur les boutons et les cartes dans les deux thèmes.
 .v-btn:focus-visible,
 .v-card--link:focus-visible {
   outline: 3px solid rgb(var(--v-theme-primary));

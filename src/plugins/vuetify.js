@@ -1,12 +1,6 @@
-/**
- * plugins/vuetify.js
- *
- * Framework documentation: https://vuetifyjs.com`
- */
-
-// Composables
+// Configuration des composants et des thèmes Vuetify.
 import { createVuetify } from 'vuetify'
-// Styles
+// Charger les icônes mdi-* utilisées dans les boutons et les styles de Vuetify.
 import '@mdi/font/css/materialdesignicons.css'
 
 import 'vuetify/styles'
@@ -14,7 +8,9 @@ import 'vuetify/styles'
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
+    // Choisir le thème clair ou sombre selon la préférence du système.
     defaultTheme: 'system',
+    // Les composants utilisent les mêmes noms de couleurs dans les deux thèmes.
     themes: {
       light: {
         colors: {
@@ -38,6 +34,7 @@ export default createVuetify({
       },
     },
   },
+  // Couleur commune pour les champs de recherche et de sélection.
   defaults: {
     VTextField: { color: 'primary' },
     VSelect: { color: 'primary' },

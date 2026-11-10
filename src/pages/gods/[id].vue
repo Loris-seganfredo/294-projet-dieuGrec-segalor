@@ -9,6 +9,7 @@
       Back
     </v-btn>
 
+    <!-- Attendre le chargement et traiter une panne de l’API avant de signaler un identifiant introuvable. -->
     <v-progress-linear
       v-if="isLoading || (!error && !hasLoaded)"
       aria-label="Loading god profile"
@@ -82,6 +83,7 @@
               {{ god.description }}
             </p>
 
+            <!-- Afficher la résidence, les symboles, les pouvoirs et les récits seulement si ces données existent. -->
             <p v-if="god.abode" class="mb-6">
               <strong>Residence:</strong> {{ god.abode }}
             </p>
@@ -116,6 +118,7 @@
 
             <v-divider class="my-5" />
 
+            <!-- L’API fournit les liens familiaux sous forme de listes, affichées ici avec des virgules. -->
             <div class="d-flex flex-wrap ga-6">
               <div v-if="god.parents?.length">
                 <h2 class="text-subtitle-1 font-weight-bold">Parents</h2>
@@ -149,10 +152,13 @@
   const router = useRouter()
   const { toggleFavorite } = useFavoriteFeedback()
   const godStore = useGodStore()
+  // Garder les états de chargement et d’erreur réactifs après extraction du store.
   const { isLoading, hasLoaded, error } = storeToRefs(godStore)
 
+  // Rechercher la fiche correspondant au paramètre [id], y compris si l’URL change sans remonter le composant.
   const god = computed(() => godStore.getGodById(route.params.id))
 
+  // Revenir à la page précédente de l’application, ou à l’accueil après un accès direct.
   function goBack () {
     if (window.history.state?.back) router.back()
     else router.push('/')

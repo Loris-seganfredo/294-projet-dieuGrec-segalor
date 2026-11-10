@@ -1,4 +1,5 @@
 <template>
+  <!-- Page statique qui présente le catalogue, les favoris et les outils utilisés. -->
   <v-container class="py-8" style="max-width: 800px">
     <h1 class="text-h3 mb-6">About Greek Gods</h1>
     <p class="text-body-1 mb-4">

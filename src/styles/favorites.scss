@@ -1,3 +1,4 @@
+// Animation partagée qui donne un effet de battement au cœur activé.
 @keyframes heartbeat {
   0%, 100% { transform: scale(1); }
   25% { transform: scale(1.5); }
