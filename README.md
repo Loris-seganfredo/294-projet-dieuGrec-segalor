@@ -159,7 +159,9 @@ Le service API, le store et les confirmations des favoris ont aussi été vérif
 
 ### Outil et contexte
 
-OpenAI Codex a été utilisé dans l’application de bureau pour le développement, les explications, le débogage, la relecture du code, la documentation et les tests. Les versions exactes des modèles utilisés lors des premières sessions n’ont pas été enregistrées. Aucun pourcentage fiable de contribution n’est disponible.
+OpenAI Codex a été utilisé dans l’application de bureau pour le développement, les explications, le débogage, la relecture du code, la documentation et les tests. Les versions exactes des modèles utilisés lors des premières sessions n’ont pas été enregistrées.
+
+J’estime l’aide globale de l’IA à **80 %** pour la réalisation du projet. J’estime que **60 % du code** a été écrit par l’IA.
 
 ### Aide reçue et adaptation au projet
 
