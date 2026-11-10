@@ -192,9 +192,11 @@ Les contributions personnelles et les apprentissages sont détaillés dans la pa
 
 Au départ, je voulais travailler sur d’autres thèmes, mais ils n’étaient plus disponibles. J’ai choisi les dieux grecs parce que c’était le dernier thème disponible qui m’intéressait.
 
-### Mes choix et ma relecture
+### Un exemple de ma contribution
 
-J’ai demandé un pied de page simple avec le nom du projet, puis une vérification de son affichage sur GitHub Pages. J’ai aussi relu les commentaires du code.
+J’ai demandé de simplifier le pied de page. Codex a modifié le composant Vue `AppFooter.vue` pour afficher une seule ligne avec l’année en cours et le nom du projet. Toutes les pages utilisent ce composant. Une seule modification suffit donc pour changer le pied de page partout.
+
+Après la publication, j’ai demandé à Codex de vérifier le résultat sur GitHub Pages. En ouvrant la page « About », il a confirmé que le pied de page affichait bien « © 2026 Greek Gods ».
 
 ### Ce que j’ai appris et ce dont je suis fier
 
